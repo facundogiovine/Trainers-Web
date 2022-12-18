@@ -12,15 +12,15 @@ function App() {
     // <BrowserRouter>
     //   <Routes>
     //     <Route path="/">
-          
+
     //       <Route path="login" element={<Login />} />
     //       <Route path="register" element={<Register />} />
     //     </Route>
     //   </Routes>
     // </BrowserRouter>
-    
-    
-    <Home/>
+
+
+    <Home />
   );
 }
 
