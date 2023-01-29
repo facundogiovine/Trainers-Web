@@ -7,39 +7,37 @@ import { FormControl, FormErrorMessage, FormLabel, Input } from "@chakra-ui/reac
 import { useFormik } from "formik";
 import { Entrenador } from "../model/Entrenador";
 import * as Yup from "yup"
-const Login = () => {
+import Cookies from 'js-cookie';
+import EntrenadorContext from "../components/EntrenadorContext";
+
+
+const Login = ({ setIsAuthenticated }) => {
+
+  const [entrenador, setEntrenador] = useState(null);
+
   const formik = useFormik({
     initialValues: { email: "", contrasena: "" },
     validationSchema: Yup.object({
       email: Yup.string().required("Ingrese un correo electronico."),
       contrasena: Yup.string().required("Ingrese su contrasena."),
     }),
-    onSubmit: (values, actions) => {
-      // alert(JSON.stringify(values, null, 2));
-      // console.log(values);
+    onSubmit: async (values, actions) => {
       actions.resetForm();
-      let response;
-      fetch("http://localhost:8080/api/v1/auth/autenticar/entrenador", { method: "POST", body: JSON.stringify(values, null, 2), headers: { "Content-Type": "application/json" } }).then(response => response.json()).then(response => responseHandler(response)).then(entrenador => console.log(entrenador));
-      // if (response) {
-      //   let entrenador = responseHandler(response);
-
-      //   console.log(entrenador);
-      // }
+      let response = await fetch("http://localhost:8080/api/v1/auth/autenticar/entrenador", { method: "POST", body: JSON.stringify(values, null, 2), headers: { "Content-Type": "application/json" } }); //Autentica al usuario
+      let authResponse = await response.json();
+      if (authResponse.autenticado) {
+        let datosPromise = await fetch(`http://localhost:8080/api/v1/entrenador/entrenador/${authResponse.id}`); //Si el autenticado funciona, recibo la data entera del usuario
+        let datosResponse = await datosPromise.json();
+        let entrenador = new Entrenador(datosResponse.id, datosResponse.descripcion, datosResponse.calificacion, datosResponse.experiencia, datosResponse.latitud, datosResponse.longitud, datosResponse.activo, datosResponse.nombres, datosResponse.apellidos, datosResponse.nombreMostrado, datosResponse.fechaNacimiento);
+        setIsAuthenticated(true);
+        Cookies.set('IsAuthenticated', true);
+        setEntrenador(entrenador);
+        console.log(EntrenadorContext);
+        
+      }
     },
   });
 
-  const responseHandler = (response) => {
-    let entrenador;
-    if (response.autenticado) {
-      let id = response.id;
-
-      fetch(`http://localhost:8080/api/v1/entrenador/entrenador/${id}`).then((response) => response.json()).then(r =>{ entrenador = new Entrenador(r.id, r.descripcion, r.calificacion, r.experiencia, r.latitud, r.longitud, r.activo, r.nombres, r.apellidos, r.nombreMostrado, r.fechaNacimiento); return entrenador}
-      ).then(e => { entrenador = e });
-
-    }
-    console.log(entrenador);
-    return entrenador;
-  }
   return (
     <div className="formContainer">
       <div className="formWrapper">

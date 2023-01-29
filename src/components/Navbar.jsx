@@ -1,7 +1,15 @@
-import React from "react";
+import React, { useContext } from 'react';
 import logo from "../images/logo.png";
+import Cookies from 'js-cookie';
+//import { EntrenadorContext } from '../index.js'
+import Entrenador from "../model/Entrenador";
 
-const Navbar = () => {
+const Navbar = ({setIsAuthenticated}) => {
+ // const { entrenador } = useContext(EntrenadorContext);
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    Cookies.remove('IsAuthenticated');
+  };
   return (
     <div className="navbar">
       {/* <img src={logo} alt="TRAINERS" className="logo" /> */}
@@ -11,8 +19,8 @@ const Navbar = () => {
           alt=""
           className="pfp"
         />
-        <span>John Doe</span>
-        <button>logout</button>
+        {/* <span>{entrenador.nombreMostrado}</span> */}
+        <button onClick={handleLogout}>logout</button>
       </div>
     </div>
   );

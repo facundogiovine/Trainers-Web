@@ -2,10 +2,10 @@ import React from "react";
 import Navbar from "./Navbar";
 import Search from "./Search";
 import Chats from "./Chats";
-const Sidebar = () => {
+const Sidebar = ({entrenador, setIsAuthenticated}) => {
   return (
     <div className="sidebar">
-      <Navbar />
+       <Navbar entrenador={entrenador} setIsAuthenticated={setIsAuthenticated} />
       <Search />
       <Chats />
     </div>

@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import Sidebar from "../components/Sidebar";
 import Chat from "../components/Chat";
-const Home = () => {
+import Entrenador from "../model/Entrenador";
+import EntrenadorContext from '../components/EntrenadorContext'
+
+const Home = ({setIsAuthenticated}) => {
+  const {entrenador} = useContext(EntrenadorContext);
+  console.log(entrenador);
   return (
     <div className="home">
       <div className="container">
-        <Sidebar />
+        <Sidebar  setIsAuthenticated={setIsAuthenticated} />
         <Chat />
       </div>
     </div>
