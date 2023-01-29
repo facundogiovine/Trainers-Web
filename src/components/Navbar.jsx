@@ -20,7 +20,7 @@ const Navbar = ({setIsAuthenticated}) => {
           className="pfp"
         />
         {/* <span>{entrenador.nombreMostrado}</span> */}
-        <button onClick={handleLogout}>logout</button>
+        <button className="button is-large font-bold" onClick={handleLogout}>Cerrar Sesión</button>
       </div>
     </div>
   );

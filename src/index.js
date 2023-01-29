@@ -5,6 +5,8 @@ import App from './App';
 import { createContext } from 'react';
 import EntrenadorContext from './components/EntrenadorContext'
 import { Entrenador }  from "./model/Entrenador";
+import "./index.css"
+import "bulma/css/bulma.css";
 
 const Root = () => {
   let [entrenador, setEntrenador] = useState(null);
