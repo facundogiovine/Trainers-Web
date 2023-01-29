@@ -5,7 +5,9 @@ const socket = new WebSocket("ws://localhost:80/chat");
 const TestWS = () => {
     const [persona1Message, setPersona1Message] = useState("");
     const [persona2Message, setPersona2Message] = useState("");
-  
+    const [persona1MessageReceived, setPersona1MessageReceived] = useState("");
+    const [persona2MessageReceived, setPersona2MessageReceived] = useState("");
+
     const handlePersona1Message = e => {
         setPersona1Message(e.target.value);
     };
@@ -41,7 +43,13 @@ const TestWS = () => {
     };
 
     socket.onmessage = e => {
-        console.log("Message received:", JSON.parse(e.data));
+        const receivedMessage = JSON.parse(e.data);
+        console.log("Message received:", receivedMessage);
+        if (receivedMessage.senderId === "1") {
+            setPersona1MessageReceived(receivedMessage.content);
+        } else if (receivedMessage.senderId === "2") {
+            setPersona2MessageReceived(receivedMessage.content);
+        }
     };
 
     socket.onerror = e => {
@@ -68,17 +76,16 @@ const TestWS = () => {
                 <button onClick={handleSendPersona2}>Enviar Persona2</button>
                 <br />
                 <span name="persona1MessageReceived">
-                    Mensaje from Persona2 received:{" "}
+                    Mensaje from Persona2 received: {persona1MessageReceived}
                 </span>
                 <br />
                 <span name="persona2MessageReceived">
-                    Mensaje from Persona1 received:{" "}
+                    Mensaje from Persona1 received: {persona2MessageReceived}
                 </span>
                 <br />
             </div>
         </div>
     );
 };
-
 
 export default TestWS;
