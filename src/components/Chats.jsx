@@ -8,18 +8,17 @@ const Chats = () => {
   const { entrenador } = useContext(EntrenadorContext);
 
 
+  const changeSelectedClient = index => {
+    console.log(index);
+  }
 
   const getClientList = async () => {
     setClientList({ ...clientList, loading: true });
 
-    // console.log(entrenador.id);
+    let response = await fetch(`http://localhost:8080/api/v1/match/matchesEntrenador/${entrenador.id}`);
+    let list = await response.json().catch([]);
 
-    let response = await fetch(`http://localhost:8080/api/v1/match/matchesCliente/${entrenador.id}`);
-    let list = await response.json();
-
-
-    console.log(list);
-
+    setClientList({ ...clientList, loading: false, data: list });
   }
 
   useEffect(() => {
@@ -28,35 +27,18 @@ const Chats = () => {
 
 
   return (
+
     <div className="chats">
-      <div className="userChat">
-        <img src="https://m.media-amazon.com/images/M/MV5BMTI3MDc4NzUyMV5BMl5BanBnXkFtZTcwMTQyMTc5MQ@@._V1_UY264_CR16,0,178,264_AL_.jpg" />
-        <div className="userChatInfo">
-          <span>Sum Ting</span>
-          <p>Hello</p>
-        </div>
-      </div>
-      <div className="userChat">
-        <img src="https://m.media-amazon.com/images/M/MV5BMTI3MDc4NzUyMV5BMl5BanBnXkFtZTcwMTQyMTc5MQ@@._V1_UY264_CR16,0,178,264_AL_.jpg" />
-        <div className="userChatInfo">
-          <span>Sum Ting</span>
-          <p>Hello</p>
-        </div>
-      </div>
-      <div className="userChat">
-        <img src="https://m.media-amazon.com/images/M/MV5BMTI3MDc4NzUyMV5BMl5BanBnXkFtZTcwMTQyMTc5MQ@@._V1_UY264_CR16,0,178,264_AL_.jpg" />
-        <div className="userChatInfo">
-          <span>Sum Ting</span>
-          <p>Hello</p>
-        </div>
-      </div>
-      <div className="userChat">
-        <img src="https://m.media-amazon.com/images/M/MV5BMTI3MDc4NzUyMV5BMl5BanBnXkFtZTcwMTQyMTc5MQ@@._V1_UY264_CR16,0,178,264_AL_.jpg" />
-        <div className="userChatInfo">
-          <span>Sum Ting</span>
-          <p>Hello</p>
-        </div>
-      </div>
+      {clientList.data.map((client, index) => {
+        return (
+          <div className="flex items-center cursor-pointer hover:bg-blue-theme-500" key={index} onClick={() => changeSelectedClient(index)}>
+            <div className="rounded-full text-xl bg-sky-200 w-12 h-12 m-2 flex items-center justify-center" >
+              {client.nombres.charAt(0)}{client.apellidos.charAt(0)}
+            </div>
+            <span>{client.nombreMostrado}</span>
+          </div>
+        )
+      })}
     </div>
   );
 };
