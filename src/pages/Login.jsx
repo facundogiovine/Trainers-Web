@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate, Link, Form } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../components/FontAwesomeIcons";
@@ -13,7 +13,7 @@ import EntrenadorContext from "../components/EntrenadorContext";
 
 const Login = ({ setIsAuthenticated }) => {
 
-  const [entrenador, setEntrenador] = useState(null);
+  const { setEntrenador } = useContext(EntrenadorContext);
 
   const formik = useFormik({
     initialValues: { email: "", contrasena: "" },
@@ -33,7 +33,7 @@ const Login = ({ setIsAuthenticated }) => {
         Cookies.set('IsAuthenticated', true);
         setEntrenador(entrenador);
         console.log(EntrenadorContext);
-        
+
       }
     },
   });

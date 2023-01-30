@@ -1,6 +1,32 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
+import EntrenadorContext from "./EntrenadorContext.jsx";
 
 const Chats = () => {
+
+  const [clientList, setClientList] = useState({ data: [] });
+
+  const { entrenador } = useContext(EntrenadorContext);
+
+
+
+  const getClientList = async () => {
+    setClientList({ ...clientList, loading: true });
+
+    // console.log(entrenador.id);
+
+    let response = await fetch(`http://localhost:8080/api/v1/match/matchesCliente/${entrenador.id}`);
+    let list = await response.json();
+
+
+    console.log(list);
+
+  }
+
+  useEffect(() => {
+    getClientList();
+  }, []);
+
+
   return (
     <div className="chats">
       <div className="userChat">
