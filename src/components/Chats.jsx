@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import EntrenadorContext from "./EntrenadorContext.jsx";
 
-const Chats = () => {
+const Chats = ({ setClienteSeleccionado }) => {
 
   const [clientList, setClientList] = useState({ data: [] });
 
@@ -9,7 +9,7 @@ const Chats = () => {
 
 
   const changeSelectedClient = index => {
-    console.log(index);
+    setClienteSeleccionado(clientList.data[index]);
   }
 
   const getClientList = async () => {
