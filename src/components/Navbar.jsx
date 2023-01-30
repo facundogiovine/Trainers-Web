@@ -3,9 +3,10 @@ import logo from "../images/logo.png";
 import Cookies from 'js-cookie';
 //import { EntrenadorContext } from '../index.js'
 import Entrenador from "../model/Entrenador";
+import EntrenadorContext from '../components/EntrenadorContext'
 
 const Navbar = ({setIsAuthenticated}) => {
- // const { entrenador } = useContext(EntrenadorContext);
+ const {entrenador} = useContext(EntrenadorContext);
   const handleLogout = () => {
     setIsAuthenticated(false);
     Cookies.remove('IsAuthenticated');
@@ -19,7 +20,7 @@ const Navbar = ({setIsAuthenticated}) => {
           alt=""
           className="pfp"
         />
-        {/* <span>{entrenador.nombreMostrado}</span> */}
+        <span>{entrenador.nombreMostrado}</span>
         <button onClick={handleLogout}>logout</button>
       </div>
     </div>

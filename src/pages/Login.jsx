@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate, Link, Form } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../components/FontAwesomeIcons";
@@ -13,7 +13,7 @@ import EntrenadorContext from "../components/EntrenadorContext";
 
 const Login = ({ setIsAuthenticated }) => {
 
-  const [entrenador, setEntrenador] = useState(null);
+  const { setEntrenador } = useContext(EntrenadorContext);
 
   const formik = useFormik({
     initialValues: { email: "", contrasena: "" },

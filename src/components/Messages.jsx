@@ -4,7 +4,7 @@ const Messages = () => {
   return (
     <div className="messages">
       <Message />
-
+      
     </div>
   );
 };
