@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 
-const socket = new WebSocket("ws://localhost:80/chat");
+let socket;
+let persona1Id = "1";
+let persona2Id = "2";
 
 const TestWS = () => {
     const [persona1Message, setPersona1Message] = useState("");
     const [persona2Message, setPersona2Message] = useState("");
     const [persona1MessageReceived, setPersona1MessageReceived] = useState("");
     const [persona2MessageReceived, setPersona2MessageReceived] = useState("");
+
+    socket = new WebSocket(`ws://localhost:80/chat?senderId=${persona1Id}?recipientId=${persona2Id}`);
 
     const handlePersona1Message = e => {
         setPersona1Message(e.target.value);

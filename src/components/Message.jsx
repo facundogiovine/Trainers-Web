@@ -12,10 +12,10 @@ const Message = () => {
       </div>
       <div className="messageContent">
         <p>hello</p>
-        <img
+        {/* <img
           src="https://m.media-amazon.com/images/I/31yqYjsAi6L._AC_SY1000_.jpg"
           alt=""
-        />
+        /> */}
       </div>
     </div>
   );
