@@ -1,10 +1,9 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
-import { createContext } from 'react';
 import EntrenadorContext from './components/EntrenadorContext'
-import { Entrenador }  from "./model/Entrenador";
+import { Entrenador } from "./model/Entrenador";
 import "./index.css"
 import "bulma/css/bulma.css";
 
@@ -13,7 +12,7 @@ const Root = () => {
   return (
     <React.StrictMode>
       <BrowserRouter>
-        <EntrenadorContext.Provider value={{entrenador, setEntrenador}}>
+        <EntrenadorContext.Provider value={{ entrenador, setEntrenador }}>
           <App />
         </EntrenadorContext.Provider>
       </BrowserRouter>

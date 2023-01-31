@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import EntrenadorContext from "./EntrenadorContext.jsx";
+import { obtenerEntrenador } from "../utils/utils.js";
 
 const Chats = ({ setClienteSeleccionado }) => {
 
   const [clientList, setClientList] = useState({ data: [] });
 
-  const { entrenador } = useContext(EntrenadorContext);
-
+  let entrenador = obtenerEntrenador();
 
   const changeSelectedClient = index => {
     setClienteSeleccionado(clientList.data[index]);
@@ -15,8 +15,8 @@ const Chats = ({ setClienteSeleccionado }) => {
   const getClientList = async () => {
     setClientList({ ...clientList, loading: true });
 
-    let response = await fetch(`http://localhost:8080/api/v1/match/matchesEntrenador/${entrenador.id}`);
-    let list = await response.json().catch([]);
+    let response = await fetch(`http://localhost:8080/api/v1/match/matchesEntrenador/${entrenador?.id}`);
+    let list = await response.json().catch([]) || [];
 
     setClientList({ ...clientList, loading: false, data: list });
   }
@@ -25,9 +25,7 @@ const Chats = ({ setClienteSeleccionado }) => {
     getClientList();
   }, []);
 
-
   return (
-
     <div className="chats">
       {clientList.data.map((client, index) => {
         return (

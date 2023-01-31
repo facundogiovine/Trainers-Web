@@ -31,6 +31,7 @@ const Login = ({ setIsAuthenticated }) => {
         let entrenador = new Entrenador(datosResponse.id, datosResponse.descripcion, datosResponse.calificacion, datosResponse.experiencia, datosResponse.latitud, datosResponse.longitud, datosResponse.activo, datosResponse.nombres, datosResponse.apellidos, datosResponse.nombreMostrado, datosResponse.fechaNacimiento);
         setIsAuthenticated(true);
         Cookies.set('IsAuthenticated', true);
+        Cookies.set('entrenador', JSON.stringify(entrenador));
         setEntrenador(entrenador);
         console.log(EntrenadorContext);
 

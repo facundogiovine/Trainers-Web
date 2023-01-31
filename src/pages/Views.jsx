@@ -4,7 +4,6 @@ import Register from './Register';
 import Login from './Login';
 import Home from './Home';
 import TestWS from './TestWS';
-import Entrenador from "../model/Entrenador";
 //import { EntrenadorContext } from '../index.js'
 
 const Views = ({ isAuthenticated, setIsAuthenticated }) => {

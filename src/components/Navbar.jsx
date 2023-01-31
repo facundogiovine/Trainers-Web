@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 import logo from "../images/logo.png";
 import Cookies from 'js-cookie';
-//import { EntrenadorContext } from '../index.js'
-import Entrenador from "../model/Entrenador";
+import { obtenerEntrenador } from '../utils/utils';
 
-const Navbar = ({setIsAuthenticated}) => {
- // const { entrenador } = useContext(EntrenadorContext);
+const Navbar = ({ setIsAuthenticated }) => {
+  let entrenador = obtenerEntrenador();
+
   const handleLogout = () => {
     setIsAuthenticated(false);
     Cookies.remove('IsAuthenticated');
@@ -19,7 +19,7 @@ const Navbar = ({setIsAuthenticated}) => {
           alt=""
           className="pfp"
         />
-        {/* <span>{entrenador.nombreMostrado}</span> */}
+        <span>{entrenador?.nombreMostrado}</span>
         <button className="button is-large font-bold" onClick={handleLogout}>Cerrar Sesión</button>
       </div>
     </div>

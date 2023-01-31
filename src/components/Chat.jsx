@@ -1,16 +1,14 @@
-import React, { useContext } from "react";
-import ReactDOM from "react-dom";
+import React from "react";
 import Input from "./Input";
 import Messages from "./Messages";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 
-const Chat = ({ clienteSeleccionado }) => {
-  
+const Chat = ({ clienteSeleccionado = {} }) => {
   return (
     <div className="chat">
       <div className="chatInfo">
-        <span>{clienteSeleccionado.nombreMostrado}</span>
+        <span>{clienteSeleccionado?.nombreMostrado}</span>
         <div className="chatIcons">
           <FontAwesomeIcon icon={faEllipsisH} className="icons" />
         </div>
