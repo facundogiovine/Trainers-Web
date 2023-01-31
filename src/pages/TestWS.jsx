@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 let socket;
-let persona1Id = "1";
+let persona1Id = "511";
 let persona2Id = "2";
 
 const TestWS = () => {

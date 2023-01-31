@@ -32,7 +32,6 @@ const Login = ({ setIsAuthenticated }) => {
         setIsAuthenticated(true);
         Cookies.set('IsAuthenticated', true);
         setEntrenador(entrenador);
-        console.log(EntrenadorContext);
         
       }
     },

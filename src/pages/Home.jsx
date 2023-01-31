@@ -6,7 +6,6 @@ import EntrenadorContext from '../components/EntrenadorContext'
 
 const Home = ({setIsAuthenticated}) => {
   const {entrenador} = useContext(EntrenadorContext);
-  console.log(entrenador);
   return (
     <div className="home">
       <div className="container">
