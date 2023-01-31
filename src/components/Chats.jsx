@@ -1,8 +1,8 @@
+import classNames from "classnames";
 import React, { useContext, useEffect, useState } from "react";
-import EntrenadorContext from "./EntrenadorContext.jsx";
 import { obtenerEntrenador } from "../utils/utils.js";
 
-const Chats = ({ setClienteSeleccionado }) => {
+const Chats = ({ clienteSeleccionado, setClienteSeleccionado }) => {
 
   const [clientList, setClientList] = useState({ data: [] });
 
@@ -29,7 +29,10 @@ const Chats = ({ setClienteSeleccionado }) => {
     <div className="chats">
       {clientList.data.map((client, index) => {
         return (
-          <div className="flex items-center cursor-pointer hover:bg-blue-theme-500" key={index} onClick={() => changeSelectedClient(index)}>
+          <div className={classNames("flex items-center cursor-pointer hover:bg-blue-theme-300",
+            { "bg-blue-theme-500 hover:bg-blue-theme-500": clienteSeleccionado?.id === client.id })}
+            key={index}
+            onClick={() => changeSelectedClient(index)}>
             <div className="rounded-full text-xl bg-sky-200 w-12 h-12 m-2 flex items-center justify-center" >
               {client.nombres.charAt(0)}{client.apellidos.charAt(0)}
             </div>

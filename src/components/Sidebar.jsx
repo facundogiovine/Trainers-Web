@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Navbar from "./Navbar";
 import Search from "./Search";
 import Chats from "./Chats";
-const Sidebar = ({ entrenador, setIsAuthenticated, setClienteSeleccionado }) => {
+const Sidebar = ({ entrenador, setIsAuthenticated, clienteSeleccionado, setClienteSeleccionado }) => {
 
 
   useEffect(() => {
@@ -13,7 +13,8 @@ const Sidebar = ({ entrenador, setIsAuthenticated, setClienteSeleccionado }) => 
     <div className="sidebar">
       <Navbar entrenador={entrenador} setIsAuthenticated={setIsAuthenticated} />
       <Search />
-      <Chats setClienteSeleccionado={setClienteSeleccionado} />
+      <Chats clienteSeleccionado={clienteSeleccionado}
+        setClienteSeleccionado={setClienteSeleccionado} />
     </div>
   );
 };

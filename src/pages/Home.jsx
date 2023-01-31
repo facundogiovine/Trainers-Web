@@ -6,11 +6,12 @@ import EntrenadorContext from '../components/EntrenadorContext'
 
 const Home = ({ setIsAuthenticated }) => {
   const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
-  
+
   return (
     <div className="home">
       <div className="container">
         <Sidebar
+          clienteSeleccionado={clienteSeleccionado}
           setIsAuthenticated={setIsAuthenticated}
           setClienteSeleccionado={setClienteSeleccionado}
         />
