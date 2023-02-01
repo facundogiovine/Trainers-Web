@@ -3,9 +3,9 @@ import { obtenerEntrenador } from "../utils/utils";
 import SocketContext from "./SocketContext";
 import Message from "./Message";
 
-const Messages = ({ clienteSeleccionado }) => {
+const Messages = ({ messageList, setMessageList, clienteSeleccionado }) => {
   const { socket, setSocket } = useContext(SocketContext);
-  const [messageList, setMessageList] = useState({ data: [] });
+  //const [messageList, setMessageList] = useState({ data: [] });
 
   let entrenador = obtenerEntrenador();
   let messagesEnd;
