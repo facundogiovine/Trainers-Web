@@ -17,7 +17,7 @@ const Messages = ({ messageList, setMessageList, clienteSeleccionado }) => {
     let mensajes = await response.json().catch([]) || [];
 
 
-    setMessageList({ ...messageList, loading: true, data: mensajes });
+    setMessageList({ ...messageList, loading: true, data: mensajes.reverse() });
   }
 
   const connectWebSocket = () => {
