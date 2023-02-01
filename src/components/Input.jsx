@@ -3,12 +3,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import EntrenadorContext from "../components/EntrenadorContext";
 
-let socket;
+// let socket;
 
 const Input = () => {
   const {entrenador} = useContext(EntrenadorContext);
   const [messageToSend, setMessageToSend] = useState("");
-  socket = new WebSocket(`ws://localhost:80/chat?senderId=${entrenador.id}?recipientId=2`);
+  // socket = new WebSocket(`ws://localhost:80/chat?senderId=${entrenador.id}?recipientId=543`);
 
 
   const handleMessageChange = (event) => {
@@ -24,7 +24,7 @@ const Input = () => {
         contenido: messageToSend,
         fecha: new Date().toISOString()
     };
-    socket.send(JSON.stringify(message));
+    //socket.send(JSON.stringify(message));
     setMessageToSend("");
     }
   };

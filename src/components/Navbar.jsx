@@ -9,6 +9,7 @@ const Navbar = ({ setIsAuthenticated }) => {
   const handleLogout = () => {
     setIsAuthenticated(false);
     Cookies.remove('IsAuthenticated');
+    Cookies.remove('entrenador');
   };
   return (
     <div className="navbar">

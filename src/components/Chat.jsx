@@ -13,7 +13,7 @@ const Chat = ({ clienteSeleccionado = {} }) => {
           <FontAwesomeIcon icon={faEllipsisH} className="icons" />
         </div>
       </div>
-      <Messages />
+      <Messages clienteSeleccionado={clienteSeleccionado} />
       <Input />
     </div>
   );

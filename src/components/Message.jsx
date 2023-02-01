@@ -1,6 +1,6 @@
 import React from "react";
 
-const Message = () => {
+const Message = ({ mensaje }) => {
   return (
     <div className="message Owner">
       <div className="messageInfo">
@@ -11,7 +11,7 @@ const Message = () => {
         <span>just now</span>
       </div>
       <div className="messageContent">
-        <p>hello</p>
+        <p>{mensaje.contenido}</p>
         {/* <img
           src="https://m.media-amazon.com/images/I/31yqYjsAi6L._AC_SY1000_.jpg"
           alt=""
