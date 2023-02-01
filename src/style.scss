@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Public+Sans:wght@500&family=Roboto:wght@900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@500&display=swap');
 
 @mixin mobile {
   @media screen and (max-width:480px) {
@@ -210,6 +211,7 @@
           span {
             font-size: 18px;
             font-weight: 500;
+            color: #fff;
           }
 
           p {
@@ -228,14 +230,18 @@
         background-color: #50a0ff;
         display: flex;
         align-items: center;
+        font-weight: 400;
+        font-size: 20px;
         justify-content: space-between;
         padding: 10px;
-        color: #00437a;
+        font-family: 'Manrope', sans-serif;
+        color: #ffffff;
       }
 
       .chatIcons {
         display: flex;
         gap: 10px;
+        color: #00437a;
 
         .icons {
           height: 24px;
@@ -285,7 +291,7 @@
             }
           }
 
-          &.NotOwner {
+          &.Owner {
             flex-direction: row-reverse;
 
             .messageContent {
@@ -314,7 +320,7 @@
           width: 100%;
           border: none;
           outline: none;
-          color: #00437a;
+          color: #010e1a;
         }
       }
 
