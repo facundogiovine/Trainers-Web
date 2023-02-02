@@ -4,12 +4,12 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import SocketContext from './components/SocketContext';
 import EntrenadorContext from './components/EntrenadorContext'
-import { Entrenador } from "./model/Entrenador";
 import "./index.css"
 import "bulma/css/bulma.css";
+import { obtenerEntrenador } from './utils/utils';
 
 const Root = () => {
-  let [entrenador, setEntrenador] = useState(null);
+  let [entrenador, setEntrenador] = useState(obtenerEntrenador());
   const [socket, setSocket] = useState(null);
 
   return (
