@@ -12,7 +12,7 @@ const Chat = ({ clienteSeleccionado = {} }) => {
       <div className="chatInfo">
         <span>{clienteSeleccionado?.nombreMostrado}</span>
         <div className="chatIcons">
-          <FontAwesomeIcon icon={faEllipsisH} className="icons" />
+          {/* <FontAwesomeIcon icon={faEllipsisH} className="icons" /> */}
         </div>
       </div>
       <Messages messageList={messageList}
