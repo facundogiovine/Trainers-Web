@@ -12,7 +12,7 @@ const Sidebar = ({ entrenador, setIsAuthenticated, clienteSeleccionado, setClien
   return (
     <div className="sidebar">
       <Navbar entrenador={entrenador} setIsAuthenticated={setIsAuthenticated} />
-      <Search />
+      {/* <Search /> */}
       <Chats clienteSeleccionado={clienteSeleccionado}
         setClienteSeleccionado={setClienteSeleccionado} />
     </div>

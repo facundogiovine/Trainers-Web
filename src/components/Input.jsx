@@ -33,13 +33,14 @@ const Input = ({ messageList, setMessageList, clienteSeleccionado }) => {
     <div className="input">
       <input
         name="messageToSend"
+        className="inputField"
         type="text"
         placeholder="Type something..."
         value={messageToSend || ""}
         onChange={handleMessageChange}
       />
       <div className="send">
-        <button name="sendMessage" onClick={sendMessage} style={{ cursor: 'pointer' }}>
+        <button name="sendMessage" onClick={sendMessage} style={{ cursor: 'pointer' }} >
           <FontAwesomeIcon icon={faPaperPlane} />
         </button>
       </div>
