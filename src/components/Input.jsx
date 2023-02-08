@@ -29,6 +29,12 @@ const Input = ({ messageList, setMessageList, clienteSeleccionado }) => {
     }
   };
 
+  const handleKeyDown = (event) => {
+    if (event.keyCode === 13) {
+      sendMessage();
+    }
+  };
+
   return (
     <div className="input">
       <input
@@ -38,6 +44,7 @@ const Input = ({ messageList, setMessageList, clienteSeleccionado }) => {
         placeholder="Type something..."
         value={messageToSend || ""}
         onChange={handleMessageChange}
+        onKeyDown={handleKeyDown}
       />
       <div className="send">
         <button name="sendMessage" onClick={sendMessage} style={{ cursor: 'pointer' }} >
