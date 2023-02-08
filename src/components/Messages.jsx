@@ -16,6 +16,23 @@ const Messages = ({ messageList, setMessageList, clienteSeleccionado }) => {
     let response = await fetch(`http://localhost:8080/api/v1/chat/mensajes?senderId=${entrenador?.id}&recipientId=${clienteSeleccionado?.id}`);
     let mensajes = await response.json().catch([]) || [];
 
+    mensajes = mensajes.map(mensaje => {
+      let date = new Date(mensaje.fecha);
+      if (!isFinite(date)) {
+        console.error("Invalid date:", mensaje.fecha);
+        return mensaje;
+      }
+      console.log(mensaje.fecha);
+      let localTime = new Intl.DateTimeFormat(undefined, {
+        timeZone: 'UTC',
+        day: "2-digit",
+        month: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+      }).format(date);
+      mensaje.fecha = localTime;
+      return mensaje;
+    });
 
     setMessageList({ ...messageList, loading: true, data: mensajes.reverse() });
   }
