@@ -14,11 +14,9 @@ const Navbar = ({ setIsAuthenticated }) => {
   return (
     <div className="navbar">
       <div className="user">
-        <img
-          src="https://m.media-amazon.com/images/M/MV5BMTI3MDc4NzUyMV5BMl5BanBnXkFtZTcwMTQyMTc5MQ@@._V1_UY264_CR16,0,178,264_AL_.jpg"
-          alt=""
-          className="pfp"
-        />
+        <div className="profilePicture" >
+          {entrenador?.nombres.charAt(0) + entrenador?.apelidos.charAt(0)}
+        </div>
         <span className='entrenadorName'>{entrenador?.nombreMostrado}</span>
         <button className="button is-large font-bold" onClick={handleLogout}>Cerrar Sesión</button>
       </div>

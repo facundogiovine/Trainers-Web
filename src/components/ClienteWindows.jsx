@@ -15,11 +15,25 @@ const ClienteWindows = ({ close, clienteSeleccionado }) => {
                 <div className="container">
                     <button className="closeButton" onClick={close}>&times;</button>
                     <div className="clienteData">
-                        <span className="clienteName">{clienteSeleccionado.nombres} {clienteSeleccionado.apellidos}</span>
-                        <span className="clienteAge">Edad: {calculateAge(clienteSeleccionado.fechaNacimiento)}</span>
-                        <span className="clienteBirthDate">Fecha de Nacimiento: {clienteSeleccionado.fechaNacimiento}</span>
-                        <span className="clienteEmail">Email: {clienteSeleccionado.email}</span>
+                        <div className="clienteName">{clienteSeleccionado.nombres} {clienteSeleccionado.apellidos}</div>
+                        <br />
+                        <div className="dataContainer">
+                            <label className="clientInformationLabel" htmlFor="clientEmail">Email:</label>
+                            <span id="clientEmail" className="clientInformation"> {clienteSeleccionado.email}</span>
+                        </div>
+                        <br />
+                        <div className="dataContainer">
+                            <label className="clientInformationLabel" htmlFor="clientAge">Edad:</label>
+                            <span id="clientAge" className="clientInformation"> {calculateAge(clienteSeleccionado.fechaNacimiento)}</span>
+                        </div>
+                        <br />
+                        <div className="dataContainer">
+                            <label className="clientInformationLabel" htmlFor="clientBirthdate">Fecha de Nacimiento:</label>
+                            <span id="clientBirthdate" className="clientInformation"> {clienteSeleccionado.fechaNacimiento}</span>
+                        </div>
+                        <br />
                     </div>
+
                 </div>
             </div>
         </Draggable>

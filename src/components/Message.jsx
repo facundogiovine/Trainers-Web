@@ -2,32 +2,42 @@ import React from "react";
 import useIntl from 'react-intl';
 import { obtenerEntrenador } from "../utils/utils";
 
-const Message = ({ mensaje }) => {
-  let formattedDate = mensaje.fecha;
+const Message = ({ mensaje, clienteSeleccionado }) => {
+
   let entrenador = obtenerEntrenador();
+
+  let formattedDate = mensaje.fecha;
   const date = new Date(mensaje.fecha);
   if (isFinite(date)) {
-    
-    formattedDate = new Intl.DateTimeFormat(undefined, {
-      timeZone: 'UTC',
-      day: "2-digit",
-      month: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit"
-    }).format(new Date(mensaje.fecha));
-
+    const currentDate = new Date();
+    if (date.getDate() === currentDate.getDate() && date.getMonth() === currentDate.getMonth() && date.getFullYear() === currentDate.getFullYear()) {
+      formattedDate = new Intl.DateTimeFormat(undefined, {
+        timezone: 'UTC',
+        hour: "2-digit",
+        minute: "2-digit"
+      }).format(date);
+    } else {
+      formattedDate = new Intl.DateTimeFormat(undefined, {
+        timeZone: 'UTC',
+        day: "2-digit",
+        month: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+      }).format(date);
+    }
   }
   return (
     <div className={`message ${String(mensaje.senderId) === String(entrenador.id) ? 'Owner' : 'NotOwner'}`}>
       <div className="messageInfo">
-        <img
-          src="https://m.media-amazon.com/images/M/MV5BMTI3MDc4NzUyMV5BMl5BanBnXkFtZTcwMTQyMTc5MQ@@._V1_UY264_CR16,0,178,264_AL_.jpg"
-          alt=""
-        />
-        <span>{formattedDate}</span>
+        <div className="profilePicture" >
+          {String(mensaje.senderId) === String(entrenador.id) ? entrenador?.nombres.charAt(0) + entrenador?.apelidos.charAt(0) : clienteSeleccionado?.nombres.charAt(0) + clienteSeleccionado?.apellidos.charAt(0)}
+        </div>
       </div>
       <div className="messageContent">
-        <p>{mensaje.contenido}</p>
+        <p className="messageTexto">
+          {mensaje.contenido}
+        </p>
+        <span className="messageFecha">{formattedDate}</span>
       </div>
     </div>
   );

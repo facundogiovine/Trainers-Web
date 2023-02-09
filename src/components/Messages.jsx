@@ -22,15 +22,23 @@ const Messages = ({ messageList, setMessageList, clienteSeleccionado }) => {
         console.error("Invalid date:", mensaje.fecha);
         return mensaje;
       }
-      console.log(mensaje.fecha);
-      let localTime = new Intl.DateTimeFormat(undefined, {
-        timeZone: 'UTC',
-        day: "2-digit",
-        month: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit"
-      }).format(date);
-      mensaje.fecha = localTime;
+      let formattedDate;
+      const currentDate = new Date();
+      if (date.getDate() === currentDate.getDate() && date.getMonth() === currentDate.getMonth() && date.getFullYear() === currentDate.getFullYear()) {
+        formattedDate = new Intl.DateTimeFormat(undefined, {
+          hour: "2-digit",
+          minute: "2-digit"
+        }).format(date);
+      } else {
+        formattedDate = new Intl.DateTimeFormat(undefined, {
+          timeZone: 'UTC',
+          day: "2-digit",
+          month: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit"
+        }).format(date);
+      }
+      mensaje.fecha = formattedDate;
       return mensaje;
     });
 
@@ -69,7 +77,7 @@ const Messages = ({ messageList, setMessageList, clienteSeleccionado }) => {
   return (
     <div className="messages">
       {messageList ? messageList.data.map((mensaje, index) => {
-        return (<Message key={index} mensaje={mensaje} />);
+        return (<Message key={index} mensaje={mensaje} clienteSeleccionado={clienteSeleccionado} />);
       }) : null}
       <div style={{ float: "left", clear: "both" }}
         ref={(el) => { messagesEnd = el; }}>
