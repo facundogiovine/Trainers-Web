@@ -1,72 +1,120 @@
-import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faImage } from "@fortawesome/free-solid-svg-icons";
+import React from "react";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import { InputAdornment } from "@mui/material";
+import "../components/FontAwesomeIcons";
 import logo from "../images/logo.png";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth, db, storage } from "../firebase";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { doc, setDoc } from "firebase/firestore";
+import { useFormik } from "formik";
+import * as Yup from "yup"
+import KeyIcon from "@mui/icons-material/Key";
+import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
+import Typography from '@mui/material/Typography';
+import { NavLink } from "react-router-dom";
 
-const Register = () => {
-  const [err, setErr] = useState(false);
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const displayName = e.target[0].value;
-    const email = e.target[1].value;
-    const password = e.target[2].value;
-    const file = e.target[3].files[0];
-    try {
-      const res = await createUserWithEmailAndPassword(auth, email, password);
+const Register = ({}) => {
+  const formik = useFormik({
+    initialValues: { email: "", contrasenaRegistro: "", confirmarContrasena: "" },
+    validationSchema: Yup.object({
+      email: Yup.string().required("Ingrese un correo electrónico."),
+      contrasenaRegistro: Yup.string().required("Ingrese su contraseña."),
+      confirmarContrasena: Yup.string().when("contrasenaRegistro", {
+        is: val => (val && val.length > 0 ? true : false),
+        then: Yup.string().oneOf(
+          [Yup.ref("contrasenaRegistro")],
+          "Las contraseñas no coinciden"
+        )
+      })
+      .required("Confirme su contraseña."),
+    }),
+    onSubmit: async (values, actions) => {
+      actions.resetForm();
+    },
+  });
 
-      const storageRef = ref(storage, displayName);
 
-      const uploadTask = uploadBytesResumable(storageRef, file);
-
-      // Register three observers:
-      uploadTask.on(
-        (error) => {
-          setErr(true);
-        },
-        () => {
-          // Handle successful uploads on complete
-          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-            await updateProfile(res.user, {
-              displayName,
-              photoURL: downloadURL,
-            });
-            await setDoc(doc(db, "users", res.user.uid), {
-              uid: res.user.uid,
-              displayName,
-              email,
-              photoURL: downloadURL,
-            });
-          });
-        }
-      );
-    } catch (err) {
-      setErr(true);
-    }
-  };
   return (
-    <div className="formContainer">
-      <div className="formWrapper">
-        <img src={logo} className="logo"></img>
-        <form onSubmit={handleSubmit}>
-          <input required type="text" placeholder="display name" />
-          <input required type="email" placeholder="email" />
-          <input required type="password" placeholder="password" />
-          <input style={{ display: "none" }} type="file" id="file" />
-          <label htmlFor="file">
-            <FontAwesomeIcon icon={faImage} className="icon" />
-            <span>Add a profile picture</span>
-          </label>
-          <button> Register </button>
-          {err && <span> Algo ha fallado. </span>}
+    <div className="flex items-center justify-center h-screen bg-blue-theme-200">
+      <div className="shadow-xl rounded-lg p-6 bg-white object-contain">
+        <div className="w-full flex justify-center align-center">
+          <img src={logo} className="mb-10 w-60 h-auto"></img>
+        </div>
+        <form onSubmit={formik.handleSubmit}  >
+          <TextField
+            name="email"
+            label="Correo"
+            type="email"
+            fullWidth
+            error={formik.errors.email && formik.touched.email}
+            helperText={formik.errors.email}
+            InputProps={{
+              endAdornment: <InputAdornment position="end"><AlternateEmailIcon /></InputAdornment>,
+            }}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.email}
+            variant="standard"
+          />
+          <TextField
+            name="contrasenaRegistro"
+            label="Contraseña"
+            type="password"
+            fullWidth
+            error={formik.errors.contrasenaRegistro && formik.touched.contrasenaRegistro}
+            helperText={formik.errors.contrasenaRegistro}
+            InputProps={{
+              endAdornment: <InputAdornment position="end"><KeyIcon /></InputAdornment>,
+            }}
+            sx={{
+              marginTop: 3,
+            }}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.contrasenaRegistro}
+            variant="standard"
+          />
+          <TextField
+            name="confirmarContrasena"
+            label="Confirmar Contraseña"
+            type="password"
+            fullWidth
+            error={formik.errors.confirmarContrasena && formik.touched.confirmarContrasena}
+            helperText={formik.errors.confirmarContrasena}
+            InputProps={{
+              endAdornment: <InputAdornment position="end"><KeyIcon /></InputAdornment>,
+            }}
+            sx={{
+              marginTop: 3,
+            }}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.confirmarContrasena}
+            variant="standard"
+          />
+          <div className="flex justify-center align-center">
+            <Button
+              size="large"
+              sx={{
+                marginTop: 3,
+                textTransform: "none",
+              }}
+              variant="contained"
+              type="submit"
+              disabled={!formik.isValid && formik.dirty}
+            >
+              Registrarse
+            </Button>
+          </div>
         </form>
-        <p>You do have an account? Login</p>
+        <NavLink
+          to="/"
+        >
+          <Typography gutterBottom component="div" color="primary" sx={{ marginTop: 3, textAlign: "center", fontWeight: 500 }}>
+            Ya tengo una cuenta
+          </Typography>
+        </NavLink>
       </div>
     </div>
   );
 };
+
 export default Register;

@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
-import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
-import App from './App';
-import SocketContext from './components/SocketContext';
-import EntrenadorContext from './components/EntrenadorContext'
+import React, { useState } from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+import App from "./App";
+import SocketContext from "./components/SocketContext";
+import EntrenadorContext from "./components/EntrenadorContext"
 import "./index.css"
-import "bulma/css/bulma.css";
-import { obtenerEntrenador } from './utils/utils';
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
+import { obtenerEntrenador } from "./utils/utils";
 
 const Root = () => {
   let [entrenador, setEntrenador] = useState(obtenerEntrenador());
@@ -25,5 +28,5 @@ const Root = () => {
   );
 };
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(<Root />);

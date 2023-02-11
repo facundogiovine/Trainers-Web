@@ -1,15 +1,18 @@
-import React, { useContext, useState } from "react";
-import { useNavigate, Link, Form } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useContext } from "react";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import { InputAdornment } from "@mui/material";
 import "../components/FontAwesomeIcons";
 import logo from "../images/logo.png";
-import { FormControl, FormErrorMessage, FormLabel, Input } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import { Entrenador } from "../model/Entrenador";
 import * as Yup from "yup"
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 import EntrenadorContext from "../components/EntrenadorContext";
-
+import KeyIcon from "@mui/icons-material/Key";
+import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
+import Typography from '@mui/material/Typography';
+import { NavLink } from "react-router-dom";
 
 const Login = ({ setIsAuthenticated }) => {
 
@@ -18,8 +21,8 @@ const Login = ({ setIsAuthenticated }) => {
   const formik = useFormik({
     initialValues: { email: "", contrasena: "" },
     validationSchema: Yup.object({
-      email: Yup.string().required("Ingrese un correo electronico."),
-      contrasena: Yup.string().required("Ingrese su contrasena."),
+      email: Yup.string().required("Ingrese un correo electrónico."),
+      contrasena: Yup.string().required("Ingrese su contraseña."),
     }),
     onSubmit: async (values, actions) => {
       actions.resetForm();
@@ -30,34 +33,77 @@ const Login = ({ setIsAuthenticated }) => {
         let datosResponse = await datosPromise.json();
         let entrenador = new Entrenador(datosResponse.id, datosResponse.descripcion, datosResponse.calificacion, datosResponse.experiencia, datosResponse.latitud, datosResponse.longitud, datosResponse.activo, datosResponse.nombres, datosResponse.apellidos, datosResponse.nombreMostrado, datosResponse.fechaNacimiento);
         setIsAuthenticated(true);
-        Cookies.set('IsAuthenticated', true);
-        Cookies.set('entrenador', JSON.stringify(entrenador));
+        Cookies.set("IsAuthenticated", true);
+        Cookies.set("entrenador", JSON.stringify(entrenador));
         setEntrenador(entrenador);
 
       }
     },
   });
 
+
   return (
-    <div className="formContainer">
-      <div className="formWrapper">
-        <img src={logo} className="logo"></img>
-
+    <div className="flex items-center justify-center h-screen bg-blue-theme-200">
+      <div className="shadow-xl rounded-lg p-6 bg-white object-contain">
+        <div className="w-full flex justify-center align-center">
+          <img src={logo} className="mb-10 w-60 h-auto"></img>
+        </div>
         <form onSubmit={formik.handleSubmit}  >
-          <FormControl isInvalid={formik.errors.email && formik.touched.email}>
-            <input name="email" placeholder="email" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.email} />
-            <FormErrorMessage color={"red"}>{formik.errors.email}</FormErrorMessage>
-          </FormControl>
-
-          <FormControl isInvalid={formik.errors.contrasena && formik.touched.contrasena}>
-            <input name="contrasena" type="password" placeholder="password" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.contrasena} />
-            <FormErrorMessage color={"red"}> {formik.errors.contrasena}</FormErrorMessage>
-          </FormControl>
-
-          <button type="submit">Log in!</button>
-
+          <TextField
+            name="email"
+            label="Correo"
+            type="email"
+            fullWidth
+            error={formik.errors.email && formik.touched.email}
+            helperText={formik.errors.email}
+            InputProps={{
+              endAdornment: <InputAdornment position="end"><AlternateEmailIcon /></InputAdornment>,
+            }}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.email}
+            variant="standard"
+          />
+          <TextField
+            name="contrasena"
+            label="Contraseña"
+            type="password"
+            fullWidth
+            error={formik.errors.contrasena && formik.touched.contrasena}
+            helperText={formik.errors.contrasena}
+            InputProps={{
+              endAdornment: <InputAdornment position="end"><KeyIcon /></InputAdornment>,
+            }}
+            sx={{
+              marginTop: 3,
+            }}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.contrasena}
+            variant="standard"
+          />
+          <div className="flex justify-center align-center">
+            <Button
+              size="large"
+              sx={{
+                marginTop: 3,
+                textTransform: "none",
+              }}
+              variant="contained"
+              type="submit"
+              disabled={!formik.isValid && formik.dirty}
+            >
+              Ingresar
+            </Button>
+          </div>
         </form>
-
+        <NavLink
+          to="/register"
+        >
+          <Typography gutterBottom component="div" color="primary" sx={{ marginTop: 3, textAlign: "center", fontWeight: 500 }}>
+            Todavía no tengo una cuenta
+          </Typography>
+        </NavLink>
       </div>
     </div>
   );
