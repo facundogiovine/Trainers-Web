@@ -41,7 +41,7 @@ const Login = ({ setIsAuthenticated }) => {
     },
   });
 
-
+console.log(formik)
   return (
     <div className="flex items-center justify-center h-screen bg-blue-theme-200">
       <div className="shadow-xl rounded-lg p-6 bg-white object-contain">

@@ -10,8 +10,10 @@ import KeyIcon from "@mui/icons-material/Key";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import Typography from '@mui/material/Typography';
 import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Register = ({}) => {
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: { email: "", contrasenaRegistro: "", confirmarContrasena: "" },
     validationSchema: Yup.object({
@@ -26,9 +28,6 @@ const Register = ({}) => {
       })
       .required("Confirme su contraseña."),
     }),
-    onSubmit: async (values, actions) => {
-      actions.resetForm();
-    },
   });
 
 
@@ -100,6 +99,7 @@ const Register = ({}) => {
               variant="contained"
               type="submit"
               disabled={!formik.isValid && formik.dirty}
+              onClick={() => navigate("/register-data")}
             >
               Registrarse
             </Button>
