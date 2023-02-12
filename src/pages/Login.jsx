@@ -55,7 +55,7 @@ console.log(formik)
             type="email"
             fullWidth
             error={formik.errors.email && formik.touched.email}
-            helperText={formik.errors.email}
+            helperText={formik.touched.email ? formik.errors.email : ""}
             InputProps={{
               endAdornment: <InputAdornment position="end"><AlternateEmailIcon /></InputAdornment>,
             }}
@@ -70,7 +70,7 @@ console.log(formik)
             type="password"
             fullWidth
             error={formik.errors.contrasena && formik.touched.contrasena}
-            helperText={formik.errors.contrasena}
+            helperText={formik.touched.email ? formik.errors.contrasena : ""}
             InputProps={{
               endAdornment: <InputAdornment position="end"><KeyIcon /></InputAdornment>,
             }}
@@ -91,7 +91,7 @@ console.log(formik)
               }}
               variant="contained"
               type="submit"
-              disabled={!formik.isValid && formik.dirty}
+              disabled={!formik.isValid || !formik.values.contrasena || !formik.values.email}
             >
               Ingresar
             </Button>
