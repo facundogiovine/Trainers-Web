@@ -17,7 +17,8 @@ const Register = ({}) => {
   const formik = useFormik({
     initialValues: { email: "", contrasenaRegistro: "", confirmarContrasena: "" },
     validationSchema: Yup.object({
-      email: Yup.string().required("Ingrese un correo electrónico."),
+      email: Yup.string().required("Ingrese un correo electrónico.")
+      .email("Ingrese un correo válido."),
       contrasenaRegistro: Yup.string().required("Ingrese su contraseña."),
       confirmarContrasena: Yup.string().when("contrasenaRegistro", {
         is: val => (val && val.length > 0 ? true : false),
@@ -98,7 +99,7 @@ const Register = ({}) => {
               }}
               variant="contained"
               type="submit"
-              disabled={!formik.isValid && formik.dirty}
+              disabled={!formik.isValid || !formik.values.email || !formik.values.contrasenaRegistro || !formik.values.confirmarContrasena}
               onClick={() => navigate("/register-data")}
             >
               Registrarse

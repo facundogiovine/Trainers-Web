@@ -21,7 +21,8 @@ const Login = ({ setIsAuthenticated }) => {
   const formik = useFormik({
     initialValues: { email: "", contrasena: "" },
     validationSchema: Yup.object({
-      email: Yup.string().required("Ingrese un correo electrónico."),
+      email: Yup.string().required("Ingrese un correo electrónico.")
+      .email("Ingrese un correo válido."),
       contrasena: Yup.string().required("Ingrese su contraseña."),
     }),
     onSubmit: async (values, actions) => {
