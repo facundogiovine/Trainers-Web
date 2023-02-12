@@ -100,9 +100,9 @@ const Register = ({}) => {
               variant="contained"
               type="submit"
               disabled={!formik.isValid || !formik.values.email || !formik.values.contrasenaRegistro || !formik.values.confirmarContrasena}
-              onClick={() => navigate("/register-data")}
+              onClick={() => navigate("/register/data")}
             >
-              Registrarse
+              Empezar
             </Button>
           </div>
         </form>
