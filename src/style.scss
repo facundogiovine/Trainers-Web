@@ -147,9 +147,12 @@
           }
         }
 
+        
+
         .user {
           display: flex;
           gap: 10px;
+          cursor: pointer;
 
           .profilePicture {
             border-radius: 50%;
@@ -166,17 +169,17 @@
             justify-content: center;
           }
 
-          button {
-            background-color: #2078e4;
-            color: white;
-            font-size: 10px;
-            border: none;
-            cursor: pointer;
+        }
+        button {
+          background-color: #2078e4;
+          color: white;
+          font-size: 10px;
+          border: none;
+          cursor: pointer;
 
-            @include tablet {
-              position: absolute;
-              bottom: 10px
-            }
+          @include tablet {
+            position: absolute;
+            bottom: 10px
           }
         }
       }
