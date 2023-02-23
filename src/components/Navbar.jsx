@@ -18,8 +18,8 @@ const Navbar = ({ setIsAuthenticated }) => {
           {entrenador?.nombres.charAt(0) + entrenador?.apelidos.charAt(0)}
         </div>
         <span className='entrenadorName'>{entrenador?.nombreMostrado}</span>
-        <button className="button is-large font-bold" onClick={handleLogout}>Cerrar Sesión</button>
       </div>
+        <button className="button is-large font-bold" onClick={handleLogout}>Cerrar Sesión</button>
     </div>
   );
 };

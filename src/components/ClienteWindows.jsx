@@ -27,10 +27,7 @@ const ClienteWindows = ({ close, clienteSeleccionado }) => {
                             <span id="clientAge" className="clientInformation"> {calculateAge(clienteSeleccionado.fechaNacimiento)}</span>
                         </div>
                         <br />
-                        <div className="dataContainer">
-                            <label className="clientInformationLabel" htmlFor="clientBirthdate">Fecha de Nacimiento:</label>
-                            <span id="clientBirthdate" className="clientInformation"> {clienteSeleccionado.fechaNacimiento}</span>
-                        </div>
+                      
                         <br />
                     </div>
 

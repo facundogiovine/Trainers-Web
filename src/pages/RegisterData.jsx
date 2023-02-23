@@ -1,5 +1,6 @@
 import React from "react";
 import * as Yup from "yup"
+import Input from '@mui/material/Input';
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -39,7 +40,9 @@ const RegisterData = () => {
   });
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ 
+      flexGrow: 1 
+      }}>
       <AppBar position="static">
         <Toolbar>
           <IconButton
@@ -57,15 +60,15 @@ const RegisterData = () => {
           </Typography>
         </Toolbar>
       </AppBar>
-      <div className="flex items-center justify-center h-screen bg-blue-theme-200">
-        <div className="shadow-xl rounded-lg p-6 bg-white object-contain">
+      <div className="flex items-center justify-center bg-blue-theme-200 overflow-auto">
+        <div className="shadow-xl rounded-lg p-6 bg-white  ">
           <form onSubmit={formik.handleSubmit} >
             <Typography
               gutterBottom
               variant="h6"
               component="h6"
               sx={{
-                marginTop: 3,
+                marginTop: 1,
               }}
             >
               Datos Personales
@@ -89,7 +92,7 @@ const RegisterData = () => {
               type="text"
               fullWidth
               sx={{
-                marginTop: 3,
+                marginTop: 1,
               }}
               error={formik.errors.apellidos && formik.touched.apellidos}
               helperText={formik.errors.apellidos}
@@ -101,7 +104,7 @@ const RegisterData = () => {
             <FormControl
               fullWidth
               sx={{
-                marginTop: 3,
+                marginTop: 1,
               }}
               variant="standard"
             >
@@ -112,7 +115,7 @@ const RegisterData = () => {
                 value={formik.values.sexo}
                 label="Sexo Biológico"
                 error={formik.errors.sexo && formik.touched.sexo}
-                onChange={formik.handleChange} s
+                onChange={formik.handleChange}
               >
                 <MenuItem value={0}>Femenino</MenuItem>
                 <MenuItem value={1}>Masculino</MenuItem>
@@ -128,7 +131,7 @@ const RegisterData = () => {
               error={formik.errors.nombreMostrado && formik.touched.nombreMostrado}
               helperText={formik.errors.nombreMostrado}
               sx={{
-                marginTop: 3,
+                marginTop: 1,
               }}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -159,11 +162,11 @@ const RegisterData = () => {
             >
               Contanos sobre vos
             </Typography>
-            <Divider />
+            <Divider/>
             {/* PREGUNTA 1 */}
             <FormControl
               sx={{
-                marginTop: 3,
+                marginTop: 1,
               }}
             >
               <Typography
@@ -173,18 +176,118 @@ const RegisterData = () => {
                   fontWeight: "bold"
                 }}
               >
-                ¿Cuál es tu objetivo al entrenar?
+                ¿Cuál es tu especialidad?
               </Typography>
               <RadioGroup
                 aria-labelledby="pregunta-1"
                 name="radio-buttons-group"
               >
-                <FormControlLabel value={0} control={<Radio />} label="Perder o mantener peso." />
-                <FormControlLabel value={1} control={<Radio />} label="Desarrollar musculatura." />
-                <FormControlLabel value={2} control={<Radio />} label="Aprender o mejorar en un deporte." />
-                <FormControlLabel value={2} control={<Radio />} label="Llevar una vida saludable." />
-                <FormControlLabel value={2} control={<Radio />} label="Recuperarme de una lesión." />
+                <FormControlLabel value={0} control={<Radio />} label="Gimnasia." />
+                <FormControlLabel value={1} control={<Radio />} label="Deporte." />
+                <FormControlLabel value={2} control={<Radio />} label="Recuperacion." />
               </RadioGroup>
+            </FormControl>
+            
+            <Divider />
+            <FormControl
+              sx={{
+                marginTop: 1,
+              }}
+            >
+              <Typography
+                gutterBottom
+                sx={{
+                  fontSize: "1rem",
+                  fontWeight: "bold"
+                }}
+              >
+                ¿Cuál es tu horario de trabajo?
+              </Typography>
+              <RadioGroup
+                name="radio-buttons-group"
+              >
+                <FormControlLabel value={0} control={<Radio />} label="Mañana." />
+                <FormControlLabel value={1} control={<Radio />} label="Tarde." />
+                <FormControlLabel value={2} control={<Radio />} label="Noche." />
+                <FormControlLabel value={3} control={<Radio />} label="Todo el dia." />
+              </RadioGroup>
+            </FormControl>
+            <Divider />
+            <FormControl
+              sx={{
+                marginTop: 1,
+              }}
+            >
+              <Typography
+                gutterBottom
+                sx={{
+                  fontSize: "1rem",
+                  fontWeight: "bold"
+                }}
+              >
+                ¿Con qué modalidad entrenas?
+              </Typography>
+              <RadioGroup
+                name="radio-buttons-group"
+              >
+                <FormControlLabel value={0} control={<Radio />} label="Presencial." />
+                <FormControlLabel value={1} control={<Radio />} label="Virtual." />
+                <FormControlLabel value={2} control={<Radio />} label="Mixto." />
+                <FormControlLabel value={3} control={<Radio />} label="No tengo preferencia." />
+              </RadioGroup>
+            </FormControl>
+            <Divider />
+            <FormControl
+              sx={{
+                marginTop: 1,
+              }}
+            >
+              <Typography
+                gutterBottom
+                sx={{
+                  fontSize: "1rem",
+                  fontWeight: "bold"
+                }}
+              >
+                ¿En donde entrenas?
+              </Typography>
+              <RadioGroup
+                name="radio-buttons-group"
+              >
+                <FormControlLabel value={0} control={<Radio />} label="En un gimnasio." />
+                <FormControlLabel value={1} control={<Radio />} label="Al aire libre." />
+                <FormControlLabel value={2} control={<Radio />} label="A domicilio." />
+                <FormControlLabel value={3} control={<Radio />} label="En un club deportivo." />
+              </RadioGroup>
+            </FormControl>
+            <Divider />
+            <FormControl
+              sx={{
+                marginTop: 2,
+              }}
+            >
+              <Typography
+                gutterBottom
+                sx={{
+                  fontSize: "1rem",
+                  fontWeight: "bold"
+                }}
+              >
+                ¿Con cuántos clientes te gustaría entrenar?
+              </Typography>
+              <Input
+                name="cantClientes"
+                label="Cantidad de Clientes"
+                fullWidth
+                type="number"
+                error={formik.errors.cantClientes && formik.touched.cantClientes}
+                helperText={formik.touched.cantClientes ? formik.errors.cantClientes : ""}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.cantClientes}
+                inputProps={{ min: 0, max: 10 }}
+                sx={{ width: "20%", marginBottom: "10px" }}
+              />
             </FormControl>
             <div className="flex justify-end align-center">
               <Button
