@@ -11,6 +11,7 @@ import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import { useFormik } from "formik";
 import Select from "@mui/material/Select";
+import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
@@ -19,10 +20,58 @@ import Radio from "@mui/material/Radio";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Button from "@mui/material/Button";
 import RadioGroup from "@mui/material/RadioGroup";
+import { useState, useEffect } from "react";
 import "dayjs/locale/es";
 
 const RegisterData = () => {
+  const [genderList, setGenderList] = useState({ data: [] });
   const navigate = useNavigate();
+  const location = useLocation();
+  const { email, password } = location.state;
+
+  const getGenderList = async () => {
+    setGenderList({ ...genderList, loading: true });
+
+    let response = await fetch('http://localhost:8080/api/v1/genero/generos');
+    let list = await response.json().catch([]) || [];
+
+    setGenderList({ ...genderList, loading: false, data: list });
+  }
+  useEffect(() => {
+    getGenderList();
+  }, []);
+
+
+  const registerEntrenador = () => {
+    const entrenador = {
+      "nombres": "Facundo",
+      "apellidos": "Giovine",
+      "nombreMostrado": "Facu Giovine",
+      "descripcion": "Entreno en un gimnasio",
+      "email": "facundo@abc.com",
+      "contrasena": "facu123",
+      "fechaNacimiento": "15/12/1995",
+      "calificacion": 5,
+      "experiencia": 0,
+      "latitud": "30.4584127488",
+      "longitud": "98.5470097408",
+      "activo": true,
+      "genero": 1,
+      "capacidadClientes": 4
+    };
+
+    fetch('http://localhost:8080/api/v1/entrenador/entrenador', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(entrenador)
+    })
+      .then(response => response.json())
+      .then(data => console.log(data))
+      .catch(error => console.error(error));
+  }
+
   const formik = useFormik({
     initialValues: { sexo: 0, nombres: "", apellidos: "", fechaNacimiento: null },
     validationSchema: Yup.object({
@@ -40,9 +89,9 @@ const RegisterData = () => {
   });
 
   return (
-    <Box sx={{ 
-      flexGrow: 1 
-      }}>
+    <Box sx={{
+      flexGrow: 1
+    }}>
       <AppBar position="static">
         <Toolbar>
           <IconButton
@@ -117,10 +166,12 @@ const RegisterData = () => {
                 error={formik.errors.sexo && formik.touched.sexo}
                 onChange={formik.handleChange}
               >
-                <MenuItem value={0}>Femenino</MenuItem>
-                <MenuItem value={1}>Masculino</MenuItem>
-                <MenuItem value={2}>Otro</MenuItem>
-                <MenuItem value={3}>Prefiero no decirlo</MenuItem>
+                {genderList.data.filter(genero => genero.mostrarEntrenador).map(genero => (
+                  <MenuItem key={genero.id} value={genero.descripcion}>
+                    {genero.descripcion}
+                  </MenuItem>
+                ))}
+
               </Select>
             </FormControl>
             <TextField
@@ -147,6 +198,7 @@ const RegisterData = () => {
               InputLabelProps={{
                 shrink: true,
               }}
+              format="dd/MM/yyyy"
               sx={{
                 marginTop: 3,
               }}
@@ -162,7 +214,7 @@ const RegisterData = () => {
             >
               Contanos sobre vos
             </Typography>
-            <Divider/>
+            <Divider />
             {/* PREGUNTA 1 */}
             <FormControl
               sx={{
@@ -187,7 +239,7 @@ const RegisterData = () => {
                 <FormControlLabel value={2} control={<Radio />} label="Recuperacion." />
               </RadioGroup>
             </FormControl>
-            
+
             <Divider />
             <FormControl
               sx={{

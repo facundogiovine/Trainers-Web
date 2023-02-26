@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import logo from "../images/logo.png";
 import Cookies from 'js-cookie';
 import { obtenerEntrenador } from '../utils/utils';
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = ({ setIsAuthenticated }) => {
   let entrenador = obtenerEntrenador();
@@ -11,10 +12,15 @@ const Navbar = ({ setIsAuthenticated }) => {
     Cookies.remove('IsAuthenticated');
     Cookies.remove('entrenador');
   };
+  const navigate = useNavigate();
+  const openProfile = () => {
+    navigate('/profile');
+  };
+
   return (
     <div className="navbar">
       <div className="user">
-        <div className="profilePicture" >
+        <div className="profilePicture" onClick={openProfile}>
           {entrenador?.nombres.charAt(0) + entrenador?.apelidos.charAt(0)}
         </div>
         <span className='entrenadorName'>{entrenador?.nombreMostrado}</span>
