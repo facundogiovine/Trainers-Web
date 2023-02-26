@@ -13,7 +13,7 @@ const Views = ({ isAuthenticated, setIsAuthenticated }) => {
     <Routes>
       <Route path="/" element={isAuthenticated && entrenador ? <Home setIsAuthenticated={setIsAuthenticated} /> : <Login setIsAuthenticated={setIsAuthenticated} />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/profile" element={<Profile />} />
+      <Route path="/profile" element={isAuthenticated && entrenador ? <Profile setIsAuthenticated={setIsAuthenticated} /> : <Login setIsAuthenticated={setIsAuthenticated} />} />
       <Route path="/register/data" element={<RegisterData />} />
       <Route path="*" element={isAuthenticated && entrenador ? <Home setIsAuthenticated={setIsAuthenticated} /> : <Login setIsAuthenticated={setIsAuthenticated} />} />
     </Routes>
