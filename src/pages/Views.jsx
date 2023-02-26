@@ -4,7 +4,7 @@ import Register from './Register';
 import RegisterData from './RegisterData';
 import Login from './Login';
 import Home from './Home';
-import TestWS from './TestWS';
+import Profile from './Profile';
 import EntrenadorContext from '../components/EntrenadorContext'
 
 const Views = ({ isAuthenticated, setIsAuthenticated }) => {
@@ -13,8 +13,8 @@ const Views = ({ isAuthenticated, setIsAuthenticated }) => {
     <Routes>
       <Route path="/" element={isAuthenticated && entrenador ? <Home setIsAuthenticated={setIsAuthenticated} /> : <Login setIsAuthenticated={setIsAuthenticated} />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/profile" element={<Profile />} />
       <Route path="/register/data" element={<RegisterData />} />
-      <Route path="/testws" element={<TestWS />} />
       <Route path="*" element={isAuthenticated && entrenador ? <Home setIsAuthenticated={setIsAuthenticated} /> : <Login setIsAuthenticated={setIsAuthenticated} />} />
     </Routes>
   );
