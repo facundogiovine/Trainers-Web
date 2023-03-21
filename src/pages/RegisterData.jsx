@@ -25,9 +25,11 @@ import "dayjs/locale/es";
 
 const RegisterData = () => {
   const [genderList, setGenderList] = useState({ data: [] });
+  const [questionList, setQuestionList] = useState({ data: [] });
   const navigate = useNavigate();
   const location = useLocation();
   const { email, password } = location.state;
+  console.log(location.state)
 
   const getGenderList = async () => {
     setGenderList({ ...genderList, loading: true });
@@ -41,6 +43,18 @@ const RegisterData = () => {
     getGenderList();
   }, []);
 
+  const getQuestionList = async () => {
+    setQuestionList({ ...questionList, loading: true });
+
+    let response = await fetch('http://localhost:8080/api/v1/pregunta/preguntasEntrenador');
+    let list = await response.json().catch([]) || [];
+
+    setQuestionList({ ...questionList, loading: false, data: list });
+    console.log(questionList.data);
+  }
+  useEffect(() => {
+    getQuestionList();
+  }, []);
 
   const registerEntrenador = () => {
     const entrenador = {
@@ -73,20 +87,30 @@ const RegisterData = () => {
   }
 
   const formik = useFormik({
-    initialValues: { sexo: 0, nombres: "", apellidos: "", fechaNacimiento: null },
+    initialValues: {
+      sexo: 0,
+      nombres: "",
+      apellidos: "",
+      fechaNacimiento: null,
+    },
     validationSchema: Yup.object({
-      email: Yup.string().required("Ingrese un correo electrónico."),
-      contrasenaRegistro: Yup.string().required("Ingrese su contraseña."),
-      confirmarContrasena: Yup.string().when("contrasenaRegistro", {
-        is: val => (val && val.length > 0 ? true : false),
-        then: Yup.string().oneOf(
-          [Yup.ref("contrasenaRegistro")],
-          "Las contraseñas no coinciden"
+      nombreMostrado: Yup.string().required("Ingrese el nombre que desea mostrar."),
+      nombres: Yup.string().required("Ingrese su nombre"),
+      apellidos: Yup.string().required("Ingrese su apellido"),
+      fechaNacimiento: Yup.date()
+        .max(
+          new Date(new Date().getFullYear() - 20, 11, 31),
+          "Debes ser mayor de 20 años"
         )
-      })
-        .required("Confirme su contraseña."),
+        .min(
+          new Date(new Date().getFullYear() - 60, 0, 1),
+          "No puede ser mayor de 60 años"
+        )
+        .nullable()
+        .required("Ingrese su fecha de nacimiento"),
     }),
   });
+
 
   return (
     <Box sx={{
@@ -164,7 +188,12 @@ const RegisterData = () => {
                 value={formik.values.sexo}
                 label="Sexo Biológico"
                 error={formik.errors.sexo && formik.touched.sexo}
-                onChange={formik.handleChange}
+                onChange={(event) => {
+                  formik.handleChange(event);
+                  const selectedGenero = genderList.data.find(genero => genero.descripcion === event.target.value);
+                  console.log(`Selected genero ID: ${selectedGenero.id}, descripcion: ${selectedGenero.descripcion}`);
+                }}
+
               >
                 {genderList.data.filter(genero => genero.mostrarEntrenador).map(genero => (
                   <MenuItem key={genero.id} value={genero.descripcion}>
@@ -196,13 +225,17 @@ const RegisterData = () => {
               fullWidth
               value={formik.values.fechaNacimiento}
               InputLabelProps={{
-                shrink: true,
+                shrink: true
               }}
               format="dd/MM/yyyy"
               sx={{
-                marginTop: 3,
+                marginTop: 3
               }}
               variant="standard"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.fechaNacimiento && Boolean(formik.errors.fechaNacimiento)}
+              helperText={formik.touched.fechaNacimiento && formik.errors.fechaNacimiento}
             />
             <Typography
               gutterBottom
@@ -214,104 +247,28 @@ const RegisterData = () => {
             >
               Contanos sobre vos
             </Typography>
-            <Divider />
-            {/* PREGUNTA 1 */}
-            <FormControl
-              sx={{
-                marginTop: 1,
-              }}
-            >
-              <Typography
-                gutterBottom
-                sx={{
-                  fontSize: "1rem",
-                  fontWeight: "bold"
-                }}
-              >
-                ¿Cuál es tu especialidad?
-              </Typography>
-              <RadioGroup
-                aria-labelledby="pregunta-1"
-                name="radio-buttons-group"
-              >
-                <FormControlLabel value={0} control={<Radio />} label="Gimnasia." />
-                <FormControlLabel value={1} control={<Radio />} label="Deporte." />
-                <FormControlLabel value={2} control={<Radio />} label="Recuperacion." />
-              </RadioGroup>
-            </FormControl>
-
-            <Divider />
-            <FormControl
-              sx={{
-                marginTop: 1,
-              }}
-            >
-              <Typography
-                gutterBottom
-                sx={{
-                  fontSize: "1rem",
-                  fontWeight: "bold"
-                }}
-              >
-                ¿Cuál es tu horario de trabajo?
-              </Typography>
-              <RadioGroup
-                name="radio-buttons-group"
-              >
-                <FormControlLabel value={0} control={<Radio />} label="Mañana." />
-                <FormControlLabel value={1} control={<Radio />} label="Tarde." />
-                <FormControlLabel value={2} control={<Radio />} label="Noche." />
-                <FormControlLabel value={3} control={<Radio />} label="Todo el dia." />
-              </RadioGroup>
-            </FormControl>
-            <Divider />
-            <FormControl
-              sx={{
-                marginTop: 1,
-              }}
-            >
-              <Typography
-                gutterBottom
-                sx={{
-                  fontSize: "1rem",
-                  fontWeight: "bold"
-                }}
-              >
-                ¿Con qué modalidad entrenas?
-              </Typography>
-              <RadioGroup
-                name="radio-buttons-group"
-              >
-                <FormControlLabel value={0} control={<Radio />} label="Presencial." />
-                <FormControlLabel value={1} control={<Radio />} label="Virtual." />
-                <FormControlLabel value={2} control={<Radio />} label="Mixto." />
-                <FormControlLabel value={3} control={<Radio />} label="No tengo preferencia." />
-              </RadioGroup>
-            </FormControl>
-            <Divider />
-            <FormControl
-              sx={{
-                marginTop: 1,
-              }}
-            >
-              <Typography
-                gutterBottom
-                sx={{
-                  fontSize: "1rem",
-                  fontWeight: "bold"
-                }}
-              >
-                ¿En donde entrenas?
-              </Typography>
-              <RadioGroup
-                name="radio-buttons-group"
-              >
-                <FormControlLabel value={0} control={<Radio />} label="En un gimnasio." />
-                <FormControlLabel value={1} control={<Radio />} label="Al aire libre." />
-                <FormControlLabel value={2} control={<Radio />} label="A domicilio." />
-                <FormControlLabel value={3} control={<Radio />} label="En un club deportivo." />
-              </RadioGroup>
-            </FormControl>
+            <>
+              {questionList.data.map(question => (
+                <div key={question.pregunta}>
+                  <Divider />
+                  <FormControl sx={{ marginTop: 1 }}>
+                    <Typography gutterBottom sx={{ fontSize: '1rem', fontWeight: 'bold' }}>
+                      {question.tituloEntrenador}
+                    </Typography>
+                    <RadioGroup name={question.pregunta}>
+                      {question.respuesta.opciones.map((opcion) => (
+                        <FormControlLabel
+                          key={opcion.id}
+                          value={opcion.id}
+                          control={<Radio onChange={() => console.log(opcion.id, opcion.textoEntrenador)} />}
+                          label={opcion.textoEntrenador}
+                        />
+                      ))}
+                    </RadioGroup>
+                  </FormControl>
+                </div>
+              ))}
+            </>
             <Divider />
             <FormControl
               sx={{
