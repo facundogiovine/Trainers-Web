@@ -32,7 +32,23 @@ const Login = ({ setIsAuthenticated }) => {
       if (authResponse.autenticado) {
         let datosPromise = await fetch(`http://localhost:8080/api/v1/entrenador/entrenador/${authResponse.id}`); //Si el autenticado funciona, recibo la data entera del usuario
         let datosResponse = await datosPromise.json();
-        let entrenador = new Entrenador(datosResponse.id, datosResponse.descripcion, datosResponse.calificacion, datosResponse.experiencia, datosResponse.latitud, datosResponse.longitud, datosResponse.activo, datosResponse.nombres, datosResponse.apellidos, datosResponse.nombreMostrado, datosResponse.fechaNacimiento);
+        let entrenador = new Entrenador(
+          datosResponse.id,
+          datosResponse.descripcion,
+          datosResponse.calificacion,
+          datosResponse.experiencia,
+          datosResponse.latitud,
+          datosResponse.longitud,
+          datosResponse.activo,
+          datosResponse.nombres,
+          datosResponse.apellidos,
+          datosResponse.email,
+          datosResponse.genero,
+          datosResponse.nombreMostrado,
+          datosResponse.fechaNacimiento,
+          datosResponse.capacidadClientes
+      );
+        console.log(entrenador)
         setIsAuthenticated(true);
         Cookies.set("IsAuthenticated", true);
         Cookies.set("entrenador", JSON.stringify(entrenador));
@@ -42,7 +58,6 @@ const Login = ({ setIsAuthenticated }) => {
     },
   });
 
-console.log(formik)
   return (
     <div className="flex items-center justify-center h-screen bg-blue-theme-200">
       <div className="shadow-xl rounded-lg p-6 bg-white object-contain">

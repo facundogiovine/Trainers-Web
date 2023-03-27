@@ -1,5 +1,6 @@
 import React from "react";
 import Draggable from "react-draggable";
+import Button from "@mui/material/Button";
 
 const ClienteWindows = ({ close, clienteSeleccionado }) => {
     const calculateAge = (birthday) => {
@@ -27,10 +28,13 @@ const ClienteWindows = ({ close, clienteSeleccionado }) => {
                             <span id="clientAge" className="clientInformation"> {calculateAge(clienteSeleccionado.fechaNacimiento)}</span>
                         </div>
                         <br />
-                      
-                        <br />
-                    </div>
+                        <div className="buttonContainer">
+                            <Button variant="contained" sx={{ color: 'white' }} size="large" style={{ margin: "0 auto", display: "block" }}>
+                                Desvincular
+                            </Button>
+                        </div>
 
+                    </div>
                 </div>
             </div>
         </Draggable>

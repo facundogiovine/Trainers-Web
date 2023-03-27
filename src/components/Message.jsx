@@ -30,7 +30,7 @@ const Message = ({ mensaje, clienteSeleccionado }) => {
     <div className={`message ${String(mensaje.senderId) === String(entrenador.id) ? 'Owner' : 'NotOwner'}`}>
       <div className="messageInfo">
         <div className="profilePicture" >
-          {String(mensaje.senderId) === String(entrenador.id) ? entrenador?.nombres.charAt(0) + entrenador?.apelidos.charAt(0) : clienteSeleccionado?.nombres.charAt(0) + clienteSeleccionado?.apellidos.charAt(0)}
+          {String(mensaje.senderId) === String(entrenador.id) ? entrenador?.nombres.charAt(0) + entrenador?.apellidos.charAt(0) : clienteSeleccionado?.nombres.charAt(0) + clienteSeleccionado?.apellidos.charAt(0)}
         </div>
       </div>
       <div className="messageContent">

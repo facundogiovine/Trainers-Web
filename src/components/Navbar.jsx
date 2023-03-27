@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Navbar = ({ setIsAuthenticated }) => {
   let entrenador = obtenerEntrenador();
-
+  console.log(entrenador)
   const handleLogout = () => {
     setIsAuthenticated(false);
     Cookies.remove('IsAuthenticated');
@@ -21,7 +21,7 @@ const Navbar = ({ setIsAuthenticated }) => {
     <div className="navbar">
       <div className="user">
         <div className="profilePicture" onClick={openProfile}>
-          {entrenador?.nombres.charAt(0) + entrenador?.apelidos.charAt(0)}
+          {entrenador?.nombres.charAt(0) + entrenador?.apellidos.charAt(0)}
         </div>
         <span className='entrenadorName'>{entrenador?.nombreMostrado}</span>
       </div>

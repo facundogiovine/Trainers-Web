@@ -26,10 +26,47 @@ import "dayjs/locale/es";
 const RegisterData = () => {
   const [genderList, setGenderList] = useState({ data: [] });
   const [questionList, setQuestionList] = useState({ data: [] });
+  const [answers, setAnswers] = useState([
+    {
+      "parametro": "DEPORTE",
+      "valorParametro": null
+    },
+    {
+      "parametro": "MODALIDAD",
+      "valorParametro": null
+    },
+    {
+      "parametro": "LOCALIZACION",
+      "valorParametro": null
+    },
+    {
+      "parametro": "HORARIO",
+      "valorParametro": null
+    },
+    {
+      "parametro": "CONDICION_SALUD",
+      "valorParametro": null
+    }
+  ]);
+
+
   const navigate = useNavigate();
   const location = useLocation();
   const { email, password } = location.state;
-  console.log(location.state)
+  console.log(email, password)
+
+  const handleAnswerChange = (opcionId, pregunta) => {
+    const updatedAnswers = answers.map(answer => {
+      if (answer.parametro === pregunta) {
+        return {
+          ...answer,
+          valorParametro: opcionId
+        };
+      }
+      return answer;
+    });
+    setAnswers(updatedAnswers);
+  };
 
   const getGenderList = async () => {
     setGenderList({ ...genderList, loading: true });
@@ -56,42 +93,93 @@ const RegisterData = () => {
     getQuestionList();
   }, []);
 
-  const registerEntrenador = () => {
+  const registerEntrenador = async () => {
     const entrenador = {
-      "nombres": "Facundo",
-      "apellidos": "Giovine",
-      "nombreMostrado": "Facu Giovine",
-      "descripcion": "Entreno en un gimnasio",
-      "email": "facundo@abc.com",
-      "contrasena": "facu123",
-      "fechaNacimiento": "15/12/1995",
-      "calificacion": 5,
-      "experiencia": 0,
-      "latitud": "30.4584127488",
-      "longitud": "98.5470097408",
-      "activo": true,
-      "genero": 1,
-      "capacidadClientes": 4
+      nombres: formik.values.nombres,
+      apellidos: formik.values.apellidos,
+      nombreMostrado: formik.values.nombreMostrado,
+      descripcion: "",
+      email: email,
+      contrasena: password,
+      fechaNacimiento: `${('0' + new Date(formik.values.fechaNacimiento).getDate()).slice(-2)}/${('0' + (new Date(formik.values.fechaNacimiento).getMonth() + 1)).slice(-2)}/${new Date(formik.values.fechaNacimiento).getFullYear()}`,
+      calificacion: 5,
+      experiencia: 0,
+      latitud: "30.4584127488",
+      longitud: "98.5470097408",
+      activo: true,
+      genero: formik.values.sexo,
+      capacidadClientes: formik.values.cantClientes
     };
+    console.log(formik.values.fechaNacimiento)
+    try {
+      const response = await fetch('http://localhost:8080/api/v1/entrenador/entrenador', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(entrenador)
+      });
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  
 
-    fetch('http://localhost:8080/api/v1/entrenador/entrenador', {
-      method: 'POST',
+  const getIdEntrenador = async (email, contrasena) => {
+    const url = 'http://localhost:8080/api/v1/auth/autenticar/entrenador';
+  
+    const body = {
+      email: email,
+      contrasena: contrasena
+    };
+  
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      });
+      const data = await response.json();
+      if (data.autenticado) {
+        return data.id;
+      } else {
+        throw new Error('Entrenador no autenticado');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+
+  const registerParametros = (id, answers) => {
+    const url = `http://localhost:8080/api/v1/entrenador/entrenador/${id}/parametros`;
+  
+    fetch(url, {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(entrenador)
+      body: JSON.stringify(answers)
     })
       .then(response => response.json())
       .then(data => console.log(data))
       .catch(error => console.error(error));
-  }
+  };
+  
+
 
   const formik = useFormik({
     initialValues: {
       sexo: 0,
       nombres: "",
       apellidos: "",
+      nombreMostrado: "",
       fechaNacimiento: null,
+      cantClientes: 4
     },
     validationSchema: Yup.object({
       nombreMostrado: Yup.string().required("Ingrese el nombre que desea mostrar."),
@@ -109,6 +197,19 @@ const RegisterData = () => {
         .nullable()
         .required("Ingrese su fecha de nacimiento"),
     }),
+    onSubmit: async () => {
+      try {
+        await registerEntrenador(); // Call the async function to register a new entrenador
+        const id = await getIdEntrenador(email, password); // Call the async function to get the id of the registered entrenador
+        console.log(id)
+        await registerParametros(id, answers); // Call the async function to register the parametros for the entrenador
+      } catch (error) {
+        console.log(answers)
+        console.error(error);
+      }
+      navigate("/");
+    }
+    
   });
 
 
@@ -191,12 +292,11 @@ const RegisterData = () => {
                 onChange={(event) => {
                   formik.handleChange(event);
                   const selectedGenero = genderList.data.find(genero => genero.descripcion === event.target.value);
-                  console.log(`Selected genero ID: ${selectedGenero.id}, descripcion: ${selectedGenero.descripcion}`);
+                  console.log(formik.values.sexo);
                 }}
-
               >
                 {genderList.data.filter(genero => genero.mostrarEntrenador).map(genero => (
-                  <MenuItem key={genero.id} value={genero.descripcion}>
+                  <MenuItem key={genero.id} value={genero.id}>
                     {genero.descripcion}
                   </MenuItem>
                 ))}
@@ -260,7 +360,7 @@ const RegisterData = () => {
                         <FormControlLabel
                           key={opcion.id}
                           value={opcion.id}
-                          control={<Radio onChange={() => console.log(opcion.id, opcion.textoEntrenador)} />}
+                          control={<Radio onChange={() => handleAnswerChange(opcion.id, question.pregunta)} />}
                           label={opcion.textoEntrenador}
                         />
                       ))}
@@ -300,6 +400,7 @@ const RegisterData = () => {
             </FormControl>
             <div className="flex justify-end align-center">
               <Button
+                name="registerButton"
                 size="large"
                 sx={{
                   marginTop: 3,
