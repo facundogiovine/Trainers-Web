@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 
 const Navbar = ({ setIsAuthenticated }) => {
   let entrenador = obtenerEntrenador();
-  console.log(entrenador)
   const handleLogout = () => {
     setIsAuthenticated(false);
     Cookies.remove('IsAuthenticated');

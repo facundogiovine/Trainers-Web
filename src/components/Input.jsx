@@ -25,6 +25,7 @@ const Input = ({ messageList, setMessageList, clienteSeleccionado }) => {
       };
       socket.send(JSON.stringify(message));
       setMessageToSend("");
+      console.log(message.fecha);
       setMessageList({ ...messageList, data: [...messageList.data, message] })
     }
   };
@@ -41,7 +42,7 @@ const Input = ({ messageList, setMessageList, clienteSeleccionado }) => {
         name="messageToSend"
         className="inputField"
         type="text"
-        placeholder="Type something..."
+        placeholder="Escribí algo..."
         value={messageToSend || ""}
         onChange={handleMessageChange}
         onKeyDown={handleKeyDown}

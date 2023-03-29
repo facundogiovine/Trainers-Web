@@ -18,6 +18,8 @@ const Messages = ({ messageList, setMessageList, clienteSeleccionado }) => {
 
     mensajes = mensajes.map(mensaje => {
       let date = new Date(mensaje.fecha);
+      date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
+      console.log(date);
       if (!isFinite(date)) {
         console.error("Invalid date:", mensaje.fecha);
         return mensaje;
