@@ -4,9 +4,11 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import { NavLink } from "react-router-dom";
 import logo from "../images/logo.png";
-import { Select, InputLabel, MenuItem } from "@mui/material";
+import { Select, InputLabel, MenuItem, Button, Stack } from "@mui/material";
 import { obtenerEntrenador } from "../utils/utils";
 import { faUserPen } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import {
   FormControl,
   RadioGroup,
@@ -47,7 +49,7 @@ const Profile = () => {
     if (!response.ok) {
       throw new Error('Error al recibir los parámetros del entrenador');
     }
-  
+
     const parametros = await response.json();
     return parametros;
   }
@@ -59,7 +61,7 @@ const Profile = () => {
     };
     fetchParametros();
   }, []);
-  
+
   const getQuestionList = async () => {
     setQuestionList({ ...questionList, loading: true });
 
@@ -87,7 +89,7 @@ const Profile = () => {
   };
 
   return (
-    <div className=" flex items-center justify-center h-screen bg-blue-theme-200 ">
+    <div className="flex items-center justify-center pt-5 pb-5 h-fit bg-blue-theme-200 object-contain ">
       <div className="w-2/4 shadow-xl rounded-lg p-6 bg-white object-contain">
         <div className="flex justify-center align-center">
           <img src={logo} className="mb-3 w-60 h-auto"></img>
@@ -137,7 +139,6 @@ const Profile = () => {
           </div>
           <div>
             {questionList.data.map(question => (
-              
               <div key={question.pregunta}>
                 <Divider />
                 <FormControl fullWidth sx={{ marginTop: 1 }}>
@@ -152,10 +153,10 @@ const Profile = () => {
                     fullWidth
                     id={question.pregunta}
                     value={parametros.find(a => a.parametro === question.pregunta).valorParametro || ''}
-                    onChange={(event) => handleAnswerChange(event.target.value, question.pregunta)
-                    }
+                    onChange={(event) => handleAnswerChange(event.target.value, question.pregunta)}
+                    sx={{ color: "#000", backgroundColor: "#f2f2f2", opacity: 1 }}
+                    disabled
                   >
-                    
                     {question.respuesta.opciones.map((opcion) => (
                       <MenuItem
                         key={opcion.id}
@@ -168,19 +169,29 @@ const Profile = () => {
                 </FormControl>
               </div>
             ))}
-
           </div>
         </div>
-        <NavLink to="/">
-          <Typography
+        <Stack direction="row" justifyContent="end">
+          <Button
             gutterBottom
             component="div"
-            color="primary"
-            sx={{ marginTop: 3, textAlign: "center", fontWeight: 500 }}
+            color="warning"
+            sx={{   marginTop: 3, textAlign: "center", fontWeight: 500, marginRight: 'auto' }}
           >
-            Volver
-          </Typography>
-        </NavLink>
+            EDITAR <FontAwesomeIcon icon={faPencil} />
+          </Button>
+          <NavLink to="/">
+            <Button
+              gutterBottom
+              component="div"
+              color="primary"
+              sx={{  marginLeft: "auto", marginTop: 3, textAlign: "center", fontWeight: 500,  justifyContent: 'flex-end'}}
+              >
+              Volver
+            </Button>
+          </NavLink>
+              </Stack>
+        
       </div>
     </div>
   );

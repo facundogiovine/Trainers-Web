@@ -24,6 +24,8 @@ import { useState, useEffect } from "react";
 import "dayjs/locale/es";
 
 const RegisterData = () => {
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
   const [genderList, setGenderList] = useState({ data: [] });
   const [questionList, setQuestionList] = useState({ data: [] });
   const [answers, setAnswers] = useState([
@@ -49,7 +51,21 @@ const RegisterData = () => {
     }
   ]);
 
-
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          setLatitude(position.coords.latitude);
+          setLongitude(position.coords.longitude);
+        },
+        error => {
+          console.log(error);
+        }
+      );
+    } else {
+      console.log("Geolocation is not supported by this browser.");
+    }
+  }, []);
   const navigate = useNavigate();
   const location = useLocation();
   const { email, password } = location.state;
@@ -104,8 +120,8 @@ const RegisterData = () => {
       fechaNacimiento: `${('0' + new Date(formik.values.fechaNacimiento).getDate()).slice(-2)}/${('0' + (new Date(formik.values.fechaNacimiento).getMonth() + 1)).slice(-2)}/${new Date(formik.values.fechaNacimiento).getFullYear()}`,
       calificacion: 5,
       experiencia: 0,
-      latitud: "30.4584127488",
-      longitud: "98.5470097408",
+      latitud: latitude,
+        longitud: longitude,
       activo: true,
       genero: formik.values.sexo,
       capacidadClientes: formik.values.cantClientes
