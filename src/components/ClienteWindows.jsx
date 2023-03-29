@@ -10,6 +10,29 @@ const ClienteWindows = ({ close, clienteSeleccionado }) => {
         return Math.abs(ageDate.getUTCFullYear() - 1970);
     }
 
+    // const unmatch = () => {
+    //     fetch('http://localhost:8080/api/v1/match/unmatch', {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/json'
+    //       },
+    //       body: JSON.stringify({
+    //         idCliente: clienteSeleccionado.id,
+    //         idEntrenador: Entrenador.id
+    //       })
+    //     })
+    //       .then(response => response.json())
+    //       .then(data => {
+    //         console.log(data);
+    //         // handle the response data
+    //       })
+    //       .catch(error => {
+    //         console.error(error);
+    //         // handle the error
+    //       });
+    //   };
+      
+
     return (
         <Draggable>
             <div className="clienteWindows">
