@@ -55,6 +55,7 @@ const Profile = () => {
     const fetchParametros = async () => {
       const params = await recibirParametrosEntrenador(entrenador.id);
       setParametros(params);
+      console.log(params)
     };
     fetchParametros();
   }, []);
@@ -136,6 +137,7 @@ const Profile = () => {
           </div>
           <div>
             {questionList.data.map(question => (
+              
               <div key={question.pregunta}>
                 <Divider />
                 <FormControl fullWidth sx={{ marginTop: 1 }}>
@@ -149,7 +151,7 @@ const Profile = () => {
                   <Select
                     fullWidth
                     id={question.pregunta}
-                    value={answers.find(a => a.parametro === question.pregunta).valorParametro || ''}
+                    value={parametros.find(a => a.parametro === question.pregunta).valorParametro || ''}
                     onChange={(event) => handleAnswerChange(event.target.value, question.pregunta)
                     }
                   >
