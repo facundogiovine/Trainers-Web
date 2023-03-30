@@ -27,12 +27,13 @@ const Messages = ({ messageList, setMessageList, clienteSeleccionado }) => {
       const currentDate = new Date();
       if (date.getDate() === currentDate.getDate() && date.getMonth() === currentDate.getMonth() && date.getFullYear() === currentDate.getFullYear()) {
         formattedDate = new Intl.DateTimeFormat(undefined, {
+          timeZone: 'America/Asuncion',
           hour: "2-digit",
           minute: "2-digit"
         }).format(date);
       } else {
         formattedDate = new Intl.DateTimeFormat(undefined, {
-          timeZone: 'UTC',
+          timeZone: 'America/Asuncion',
           day: "2-digit",
           month: "2-digit",
           hour: "2-digit",

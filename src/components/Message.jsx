@@ -1,31 +1,34 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import useIntl from 'react-intl';
 import { obtenerEntrenador } from "../utils/utils";
 
 const Message = ({ mensaje, clienteSeleccionado }) => {
 
   let entrenador = obtenerEntrenador();
-
-  let formattedDate = mensaje.fecha;
-  const date = new Date(mensaje.fecha);
-  if (isFinite(date)) {
-    const currentDate = new Date();
-    if (date.getDate() === currentDate.getDate() && date.getMonth() === currentDate.getMonth() && date.getFullYear() === currentDate.getFullYear()) {
-      formattedDate = new Intl.DateTimeFormat(undefined, {
-        timezone: 'UTC',
-        hour: "2-digit",
-        minute: "2-digit"
-      }).format(date);
-    } else {
-      formattedDate = new Intl.DateTimeFormat(undefined, {
-        timeZone: 'UTC',
-        day: "2-digit",
-        month: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit"
-      }).format(date);
+  const [formattedDate, setFormattedDate] = useState(mensaje.fecha);
+  
+  useEffect(() => {
+    const date = new Date(mensaje.fecha);
+    if (isFinite(date)) {
+      const currentDate = new Date();
+      if (date.getDate() === currentDate.getDate() && date.getMonth() === currentDate.getMonth() && date.getFullYear() === currentDate.getFullYear()) {
+        setFormattedDate(new Intl.DateTimeFormat(undefined, {
+          timeZone: 'America/Asuncion',
+          hour: "2-digit",
+          minute: "2-digit"
+        }).format(date));
+      } else {
+        setFormattedDate(new Intl.DateTimeFormat(undefined, {
+          timeZone: 'America/Asuncion',
+          day: "2-digit",
+          month: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit"
+        }).format(date));
+      }
     }
-  }
+  }, [mensaje.fecha]);
+
   return (
     <div className={`message ${String(mensaje.senderId) === String(entrenador.id) ? 'Owner' : 'NotOwner'}`}>
       <div className="messageInfo">
