@@ -17,8 +17,23 @@ const Register = ({}) => {
   const formik = useFormik({
     initialValues: { email: "", contrasenaRegistro: "", confirmarContrasena: "" },
     validationSchema: Yup.object({
-      email: Yup.string().required("Ingrese un correo electrónico.")
-      .email("Ingrese un correo válido."),
+      email: Yup.string()
+      .required("Ingrese un correo electrónico.")
+      .email("Ingrese un correo válido.")
+      .test(
+        "emailExists",
+        "El correo ya está en uso.",
+        async (value) => {
+          const response = await fetch(
+            "http://localhost:8080/api/v1/entrenador/entrenadores"
+          );
+          const entrenadores = await response.json();
+          return !entrenadores.some(
+            (entrenador) =>
+              entrenador.email.toLowerCase() === value.toLowerCase()
+          );
+        }
+      ),
       contrasenaRegistro: Yup.string().required("Ingrese su contraseña."),
       confirmarContrasena: Yup.string().when("contrasenaRegistro", {
         is: val => (val && val.length > 0 ? true : false),
@@ -31,7 +46,6 @@ const Register = ({}) => {
     }),
   });
 
-  console.log(formik)
   return (
     <div className="flex items-center justify-center h-screen bg-blue-theme-200">
       <div className="shadow-xl rounded-lg p-6 bg-white object-contain">
@@ -39,21 +53,32 @@ const Register = ({}) => {
           <img src={logo} className="mb-10 w-60 h-auto"></img>
         </div>
         <form onSubmit={formik.handleSubmit}  >
-          <TextField
-            name="email"
-            label="Correo"
-            type="email"
-            fullWidth
-            error={formik.errors.email && formik.touched.email}
-            helperText={formik.touched.email ? formik.errors.email : ""}
-            InputProps={{
-              endAdornment: <InputAdornment position="end"><AlternateEmailIcon /></InputAdornment>,
-            }}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.email}
-            variant="standard"
-          />
+        <TextField
+  name="email"
+  label="Correo"
+  type="email"
+  fullWidth
+  error={
+    (formik.errors.email && formik.touched.email) ||
+    (formik.errors.emailExists && formik.touched.email)
+  }
+  helperText={
+    formik.touched.email
+      ? formik.errors.email || formik.errors.emailExists
+      : ""
+  }
+  InputProps={{
+    endAdornment: (
+      <InputAdornment position="end">
+        <AlternateEmailIcon />
+      </InputAdornment>
+    ),
+  }}
+  onChange={formik.handleChange}
+  onBlur={formik.handleBlur}
+  value={formik.values.email}
+  variant="standard"
+/>
           <TextField
             name="contrasenaRegistro"
             label="Contraseña"
@@ -100,7 +125,20 @@ const Register = ({}) => {
               variant="contained"
               type="submit"
               disabled={!formik.isValid || !formik.values.email || !formik.values.contrasenaRegistro || !formik.values.confirmarContrasena}
-              onClick={() => navigate("/register/data", { state: { email: formik.values.email, password: formik.values.contrasenaRegistro } })}
+              onClick={() => {
+                fetch("http://localhost:8080/api/v1/entrenador/entrenadores")
+                  .then(response => response.json())
+                  .then(data => {
+                    const entrenadores = data;
+                    console.log(entrenadores)
+                    const emailExists = entrenadores.some(entrenador => entrenador.email.toLowerCase() === formik.values.email.toLowerCase());
+                    if (!emailExists) {
+                      navigate("/register/data", { state: { email: formik.values.email, password: formik.values.contrasenaRegistro } });
+                    }
+                  })
+                  .catch(error => console.error(error));
+              }}
+              
             >
               Empezar
             </Button>

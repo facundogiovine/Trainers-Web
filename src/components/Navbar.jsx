@@ -19,8 +19,8 @@ const Navbar = ({ setIsAuthenticated }) => {
 
   return (
     <div className="navbar">
-      <div className="user">
-        <div className="profilePicture" onClick={openProfile}>
+      <div className="user" onClick={openProfile}>
+        <div className="profilePicture" >
           {entrenador?.nombres.charAt(0) + entrenador?.apellidos.charAt(0)}
         </div>
         <span className='entrenadorName'>{entrenador?.nombreMostrado}</span>

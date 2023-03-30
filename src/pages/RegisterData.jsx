@@ -28,6 +28,7 @@ const RegisterData = () => {
   const [longitude, setLongitude] = useState(null);
   const [genderList, setGenderList] = useState({ data: [] });
   const [questionList, setQuestionList] = useState({ data: [] });
+  const [selectionMade, setSelectionMade] = useState(false);
   const [answers, setAnswers] = useState([
     {
       "parametro": "DEPORTE",
@@ -81,6 +82,7 @@ const RegisterData = () => {
       }
       return answer;
     });
+
     setAnswers(updatedAnswers);
   };
 
@@ -114,14 +116,14 @@ const RegisterData = () => {
       nombres: formik.values.nombres,
       apellidos: formik.values.apellidos,
       nombreMostrado: formik.values.nombreMostrado,
-      descripcion: "",
+      descripcion: "Soy un entrenador! Me llamo " + formik.values.nombreMostrado,
       email: email,
       contrasena: password,
       fechaNacimiento: `${('0' + new Date(formik.values.fechaNacimiento).getDate()).slice(-2)}/${('0' + (new Date(formik.values.fechaNacimiento).getMonth() + 1)).slice(-2)}/${new Date(formik.values.fechaNacimiento).getFullYear()}`,
       calificacion: 5,
-      experiencia: 0,
+      experiencia: formik.values.experiencia,
       latitud: latitude,
-        longitud: longitude,
+      longitud: longitude,
       activo: true,
       genero: formik.values.sexo,
       capacidadClientes: formik.values.cantClientes
@@ -141,16 +143,16 @@ const RegisterData = () => {
       console.error(error);
     }
   }
-  
+
 
   const getIdEntrenador = async (email, contrasena) => {
     const url = 'http://localhost:8080/api/v1/auth/autenticar/entrenador';
-  
+
     const body = {
       email: email,
       contrasena: contrasena
     };
-  
+
     try {
       const response = await fetch(url, {
         method: 'POST',
@@ -169,11 +171,11 @@ const RegisterData = () => {
       console.error(error);
     }
   };
-  
+
 
   const registerParametros = (id, answers) => {
     const url = `http://localhost:8080/api/v1/entrenador/entrenador/${id}/parametros`;
-  
+    console.log(JSON.stringify(answers))
     fetch(url, {
       method: 'PUT',
       headers: {
@@ -185,7 +187,7 @@ const RegisterData = () => {
       .then(data => console.log(data))
       .catch(error => console.error(error));
   };
-  
+
 
 
   const formik = useFormik({
@@ -195,7 +197,8 @@ const RegisterData = () => {
       apellidos: "",
       nombreMostrado: "",
       fechaNacimiento: null,
-      cantClientes: 4
+      cantClientes: 4,
+      experiencia: 0
     },
     validationSchema: Yup.object({
       nombreMostrado: Yup.string().required("Ingrese el nombre que desea mostrar."),
@@ -225,10 +228,14 @@ const RegisterData = () => {
       }
       navigate("/");
     }
-    
+
   });
 
-
+  const allQuestionsAnswered = questionList.data.every(
+    (question) =>
+      answers.find((answer) => answer.parametro === question.pregunta)
+        ?.valorParametro
+  );
   return (
     <Box sx={{
       flexGrow: 1
@@ -353,6 +360,24 @@ const RegisterData = () => {
               error={formik.touched.fechaNacimiento && Boolean(formik.errors.fechaNacimiento)}
               helperText={formik.touched.fechaNacimiento && formik.errors.fechaNacimiento}
             />
+            <FormControl>
+              <Typography variant="body1" component="span" sx={{ fontSize: "0.8rem", color: "#00000099", fontWeight: "400", marginTop: 3 }}>
+                Años de Experiencia
+              </Typography>
+              <Input
+                name="experiencia"
+                label="Años de Experiencia"
+                fullWidth
+                type="number"
+                error={formik.errors.cantClientes && formik.touched.cantClientes}
+                helperText={formik.touched.cantClientes ? formik.errors.cantClientes : ""}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.experiencia}
+                inputProps={{ min: 0 }}
+                sx={{ marginBottom: "10px" }}
+              />
+            </FormControl>
             <Typography
               gutterBottom
               variant="h6"
@@ -371,12 +396,17 @@ const RegisterData = () => {
                     <Typography gutterBottom sx={{ fontSize: '1rem', fontWeight: 'bold' }}>
                       {question.tituloEntrenador}
                     </Typography>
-                    <RadioGroup name={question.pregunta}>
+                    <RadioGroup name={question.pregunta} >
                       {question.respuesta.opciones.map((opcion) => (
                         <FormControlLabel
                           key={opcion.id}
                           value={opcion.id}
-                          control={<Radio onChange={() => handleAnswerChange(opcion.id, question.pregunta)} />}
+                          control={<Radio onChange={() => handleAnswerChange(opcion.id, question.pregunta)}
+                            checked={
+                              answers.find((answer) => answer.parametro === question.pregunta)
+                                ?.valorParametro === opcion.id
+                            }
+                          />}
                           label={opcion.textoEntrenador}
                         />
                       ))}
@@ -413,6 +443,7 @@ const RegisterData = () => {
                 inputProps={{ min: 0, max: 10 }}
                 sx={{ width: "20%", marginBottom: "10px" }}
               />
+
             </FormControl>
             <div className="flex justify-end align-center">
               <Button
@@ -424,7 +455,7 @@ const RegisterData = () => {
                 }}
                 variant="contained"
                 type="submit"
-                disabled={!formik.isValid}
+                disabled={!formik.isValid || !allQuestionsAnswered}
               >
                 Registrarse
               </Button>
