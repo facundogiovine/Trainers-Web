@@ -6,7 +6,7 @@ import Divider from "@mui/material/Divider";
 import { NavLink } from "react-router-dom";
 import Cookies from "js-cookie";
 import logo from "../images/logo.png";
-import { Select, InputLabel, MenuItem, Button, Stack, Input } from "@mui/material";
+import { Select, InputLabel, MenuItem, Button, Stack, Input, Avatar } from "@mui/material";
 import { obtenerEntrenador } from "../utils/utils";
 import { faFloppyDisk, faSave, faUserPen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -20,6 +20,9 @@ import {
 
 const Profile = () => {
   const navigate = useNavigate();
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const [entrenadorPfp, setEntrenadorPfp] = useState(null);
   const [entrenador, setEntrenador] = useState(obtenerEntrenador());
   const [updateEntrenador, setUpdateEntrenador] = useState(entrenador);
   const [latitude, setLatitude] = useState(null);
@@ -84,7 +87,6 @@ const Profile = () => {
       };
     });
   }
-
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -115,6 +117,59 @@ const Profile = () => {
   useEffect(() => {
     getQuestionList();
   }, []);
+
+  const handleFileInputChange = async event => {
+    const file = event.target.files[0];
+    setSelectedFile(file);
+    setPreviewUrl(URL.createObjectURL(file));
+
+    const base64Image = await convertImageToBase64(file);
+    const data = {
+      idPersona: updateEntrenador.id,
+      tipoPersona: "ENTRENADOR",
+      tipoImagen: "FOTO_PERFIL",
+      base64: base64Image,
+    };
+    try {
+      const response = await fetch("http://localhost:8080/api/v1/imagen/imagen", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      // handle successful response here
+    } catch (error) {
+      console.error("There was a problem with the fetch operation:", error);
+      // handle error here
+    }
+  };
+
+  const convertImageToBase64 = file => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        const base64 = reader.result.split(",")[1];
+        resolve(base64);
+      };
+      reader.onerror = error => reject(error);
+    });
+  };
+
+  useEffect(() => {
+    async function fetchEntrenadorPfp() {
+        const response = await fetch(`http://localhost:8080/api/v1/imagen/imagen?idPersona=${updateEntrenador.id}&tipoPersona=ENTRENADOR&tipoImagen=FOTO_PERFIL`);
+        const data = await response.json();
+        const { base64 } = data;
+        setEntrenadorPfp(base64);
+    }
+
+    fetchEntrenadorPfp();
+}, [updateEntrenador.id]);
 
   const handleAnswerChange = (opcionId, pregunta) => {
     const updatedAnswers = parametros.map((answer) => {
@@ -171,8 +226,8 @@ const Profile = () => {
       .catch(error => {
         console.error('Error while updating entrenador:', error);
       });
-    
-      console.log(JSON.stringify(answers))
+
+    console.log(JSON.stringify(answers))
     const putUrl = `http://localhost:8080/api/v1/entrenador/entrenador/${updateEntrenador.id}/parametros`;
     console.log(JSON.stringify(answers))
     fetch(putUrl, {
@@ -185,9 +240,9 @@ const Profile = () => {
       .then(response => response.json())
       .then(data => console.log(data))
       .catch(error => console.error(error));
-      Cookies.set("entrenador", JSON.stringify(updateEntrenador));
-      setEntrenador(obtenerEntrenador());
-      setEditable(false);
+    Cookies.set("entrenador", JSON.stringify(updateEntrenador));
+    setEntrenador(obtenerEntrenador());
+    setEditable(false);
   };
 
 
@@ -197,6 +252,20 @@ const Profile = () => {
         <div className="flex justify-center align-center">
           <img src={logo} className="mb-3 w-60 h-auto"></img>
         </div>
+        <label htmlFor="file-input">
+          <Avatar
+            alt=""
+            src={previewUrl || `data:image/png;base64,${entrenadorPfp}`}
+            sx={{ width: '200px', height: '200px', marginLeft: 'auto', marginRight: 'auto', cursor: 'pointer' }}
+          />
+          <input
+            id="file-input"
+            type="file"
+            accept="image/*"
+            style={{ display: "none" }}
+            onChange={handleFileInputChange}
+          />
+        </label>
         <Typography
           variant="h4"
           gutterBottom
@@ -225,7 +294,6 @@ const Profile = () => {
             onChange={(event) => handleFieldChange('descripcion', event.target.value)}
           />
         )}
-
         <div className="flex flex-col gap-2">
           <div>
             <InputLabel variant="body1" component="span" sx={{ fontWeight: "bold" }}>

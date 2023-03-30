@@ -29,9 +29,9 @@ const Message = ({ mensaje, clienteSeleccionado }) => {
   return (
     <div className={`message ${String(mensaje.senderId) === String(entrenador.id) ? 'Owner' : 'NotOwner'}`}>
       <div className="messageInfo">
-        <div className="profilePicture" >
+        {/* <div className="profilePicture" >
           {String(mensaje.senderId) === String(entrenador.id) ? entrenador?.nombres.charAt(0) + entrenador?.apellidos.charAt(0) : clienteSeleccionado?.nombres.charAt(0) + clienteSeleccionado?.apellidos.charAt(0)}
-        </div>
+        </div> */}
       </div>
       <div className="messageContent">
         <p className="messageTexto">
