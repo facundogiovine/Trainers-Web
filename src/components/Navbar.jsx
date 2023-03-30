@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom';
 const Navbar = ({ setIsAuthenticated }) => {
   const [entrenadorPfp, setEntrenadorPfp] = useState(null);
   let entrenador = obtenerEntrenador();
-  console.log(entrenador)
   const handleLogout = () => {
     setIsAuthenticated(false);
     Cookies.remove('IsAuthenticated');
